@@ -5,18 +5,21 @@ import Time exposing (Time, second)
 
 import Svg exposing (..)
 
-clock model =
-    [ clockCircle model
-    , clockHand model
+clock: Time -> List (Svg msg)
+clock time =
+    [ clockCircle time
+    , clockHand time
     ]
 
-clockCircle model =
+clockCircle: Time -> Svg msg
+clockCircle time =
     circle [ cx "50", cy "50", r "45", fill "#0B79CE" ] []
 
-clockHand model =
+clockHand: Time -> Svg msg
+clockHand time =
     let
       angle =
-        turns (Time.inMinutes model.time)
+        turns (Time.inMinutes time)
 
       handX =
         toString (50 + 40 * cos angle)

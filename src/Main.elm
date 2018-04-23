@@ -121,7 +121,7 @@ view model =
     svg [ viewBox "0 0 100 100", width "300px" ]
         (
         []
-        ++ clock model
+        ++ clock model.time
         ++ spaceShuttle model
         ++ bullets model
         )
