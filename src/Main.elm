@@ -91,4 +91,4 @@ clockHand model =
       line [ x1 "50", y1 "50", x2 handX, y2 handY, stroke "#023963" ] []
 
 spaceShuttle model =
-    polygon [ points "50,44 47,53 53,53", fill "#992222" ] []
+    polygon [ points "50,44 47,53 53,53", stroke "#FFFFFF" ] []
