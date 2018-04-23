@@ -24,6 +24,7 @@ type alias Bullet =
     , y: Int
     , dx: Int
     , dy: Int
+    , range: Int
     }
 
 type alias Model =
@@ -34,7 +35,7 @@ type alias Model =
 
 init : (Model, Cmd Msg)
 init =
-  (Model 0 [ Bullet 50 40 0 -1], Cmd.none)
+  (Model 0 [], Cmd.none)
 
 
 
@@ -64,7 +65,7 @@ update msg model =
 fire: Model -> Model
 fire model =
     let
-        bullet = Bullet 50 40 0 -1
+        bullet = Bullet 50 40 0 -1 10
     in
         { model | bullets = bullet :: model.bullets }
 
@@ -73,6 +74,7 @@ updateBullets model =
     let
         bullets = model.bullets
             |> List.map updateBullet
+            |> List.filter (\b -> b.range > 0)
     in
         { model | bullets = bullets }
 
@@ -83,8 +85,9 @@ updateBullet bullet =
         dy = bullet.dy
         x = bullet.x + dx
         y = bullet.y + dy
+        range = bullet.range - 1
     in
-        Bullet x y dx dy
+        Bullet x y dx dy range
 
 
 -- SUBSCRIPTIONS
