@@ -61,7 +61,8 @@ update msg model =
 
 updateBullets: List Bullet -> List Bullet
 updateBullets bullets =
-    List.map updateBullet bullets
+    bullets
+        |> List.map updateBullet
 
 updateBullet: Bullet -> Bullet
 updateBullet bullet =
