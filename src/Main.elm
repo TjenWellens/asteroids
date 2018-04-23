@@ -75,10 +75,16 @@ view model =
       toString (50 + 40 * sin angle)
   in
     svg [ viewBox "0 0 100 100", width "300px" ]
-      [ clockCircle model
-      , clockHand model
-      , spaceShuttle model
-      ]
+        (
+        []
+        ++ clock model
+        ++ spaceShuttle model
+        )
+
+clock model =
+    [ clockCircle model
+    , clockHand model
+    ]
 
 clockCircle model =
     circle [ cx "50", cy "50", r "45", fill "#0B79CE" ] []
@@ -97,4 +103,4 @@ clockHand model =
       line [ x1 "50", y1 "50", x2 handX, y2 handY, stroke "#023963" ] []
 
 spaceShuttle model =
-    polygon [ points "50,44 47,53 53,53", stroke "#FFFFFF" ] []
+    [ polygon [ points "50,44 47,53 53,53", stroke "#FFFFFF" ] [] ]
