@@ -18,14 +18,20 @@ main =
 
 
 -- MODEL
+type alias Bullet =
+    { x: Int
+    , y: Int
+    }
 
-
-type alias Model = Time
+type alias Model =
+    { time: Time
+    , bullets: List Bullet
+    }
 
 
 init : (Model, Cmd Msg)
 init =
-  (0, Cmd.none)
+  (Model 0 [], Cmd.none)
 
 
 
@@ -40,7 +46,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     Tick newTime ->
-      (newTime, Cmd.none)
+      ({model | time = newTime }, Cmd.none)
 
 
 
@@ -60,7 +66,7 @@ view : Model -> Html Msg
 view model =
   let
     angle =
-      turns (Time.inMinutes model)
+      turns (Time.inMinutes model.time)
 
     handX =
       toString (50 + 40 * cos angle)
@@ -80,7 +86,7 @@ clockCircle model =
 clockHand model =
     let
       angle =
-        turns (Time.inMinutes model)
+        turns (Time.inMinutes model.time)
 
       handX =
         toString (50 + 40 * cos angle)
