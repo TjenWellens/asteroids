@@ -4,6 +4,7 @@ import Html exposing (Html)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 import Time exposing (Time, second)
+import Keyboard
 
 
 
@@ -42,6 +43,7 @@ init =
 
 type Msg
   = Tick Time
+  | KeyMsg Keyboard.KeyCode
   | UpdateBullets
 
 
@@ -56,8 +58,17 @@ update msg model =
       , Cmd.none
       )
 
+    KeyMsg keycode -> (fire model, Cmd.none)
+
     UpdateBullets ->
       ({ model | bullets = updateBullets model.bullets }, Cmd.none)
+
+fire: Model -> Model
+fire model =
+    let
+        bullet = Bullet 50 40 0 -1
+    in
+        { model | bullets = bullet :: model.bullets }
 
 updateBullets: List Bullet -> List Bullet
 updateBullets bullets =
@@ -80,7 +91,10 @@ updateBullet bullet =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Time.every second Tick
+    Sub.batch
+        [ Time.every second Tick
+        , Keyboard.downs KeyMsg
+        ]
 
 
 
