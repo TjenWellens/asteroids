@@ -42,14 +42,36 @@ init =
 
 type Msg
   = Tick Time
+  | UpdateBullets
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     Tick newTime ->
-      ({model | time = newTime }, Cmd.none)
+      ( { model
+        | time = newTime
+        , bullets = updateBullets model.bullets
+        }
+      , Cmd.none
+      )
 
+    UpdateBullets ->
+      ({ model | bullets = updateBullets model.bullets }, Cmd.none)
+
+updateBullets: List Bullet -> List Bullet
+updateBullets bullets =
+    List.map updateBullet bullets
+
+updateBullet: Bullet -> Bullet
+updateBullet bullet =
+    let
+        dx = bullet.dx
+        dy = bullet.dy
+        x = bullet.x + dx
+        y = bullet.y + dy
+    in
+        Bullet x y dx dy
 
 
 -- SUBSCRIPTIONS
