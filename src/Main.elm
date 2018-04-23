@@ -1,3 +1,5 @@
+module Main exposing (main)
+
 import Html exposing (Html)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
