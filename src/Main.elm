@@ -44,6 +44,7 @@ init =
 type Msg
   = Tick Time
   | KeyMsg Keyboard.KeyCode
+  | FireBullet
   | UpdateBullets
 
 
@@ -51,17 +52,14 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     Tick newTime ->
-      ( { model
-        | time = newTime
-        , bullets = updateBullets model.bullets
-        }
-      , Cmd.none
-      )
+        update UpdateBullets { model | time = newTime }
 
-    KeyMsg keycode -> (fire model, Cmd.none)
+    KeyMsg keycode ->
+        update FireBullet model
 
-    UpdateBullets ->
-      ({ model | bullets = updateBullets model.bullets }, Cmd.none)
+    FireBullet -> (fire model, Cmd.none)
+
+    UpdateBullets -> (updateBullets model, Cmd.none)
 
 fire: Model -> Model
 fire model =
@@ -70,10 +68,13 @@ fire model =
     in
         { model | bullets = bullet :: model.bullets }
 
-updateBullets: List Bullet -> List Bullet
-updateBullets bullets =
-    bullets
-        |> List.map updateBullet
+updateBullets: Model -> Model
+updateBullets model =
+    let
+        bullets = model.bullets
+            |> List.map updateBullet
+    in
+        { model | bullets = bullets }
 
 updateBullet: Bullet -> Bullet
 updateBullet bullet =
