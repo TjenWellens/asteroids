@@ -38,3 +38,7 @@ move spaceShuttle =
         newPosition = Position x y
     in
         {spaceShuttle|position = newPosition}
+
+thrust: SpaceShuttle -> SpaceShuttle
+thrust spaceShuttle =
+    {spaceShuttle|speed = spaceShuttle.speed + 1}

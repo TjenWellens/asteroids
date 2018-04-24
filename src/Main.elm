@@ -46,7 +46,7 @@ type Msg
   | KeyDown KeyCode
   | FireBullet
   | RotateLeft
-  | MoveUp
+  | Thrust
   | RotateRight
   | MoveDown
   | UpdateBullets
@@ -65,7 +65,7 @@ update msg model =
     UpdateBullets -> (updateBullets model, Cmd.none)
 
     RotateLeft -> (rotate model (Heading -1 0), Cmd.none)
-    MoveUp -> (rotate model (Heading 0 -1), Cmd.none)
+    Thrust -> (do SpaceShuttle.thrust model, Cmd.none)
     RotateRight -> (rotate model (Heading 1 0), Cmd.none)
     MoveDown -> (rotate model (Heading 0 1), Cmd.none)
 
@@ -76,7 +76,11 @@ tick newTime model =
     model
         |> tickTime newTime
         |> updateBullets
-        |> moveSpaceShuttle
+        |> do SpaceShuttle.move
+
+do: (SpaceShuttle -> SpaceShuttle) -> Model -> Model
+do action model =
+    {model|spaceShuttle = action model.spaceShuttle}
 
 moveSpaceShuttle: Model -> Model
 moveSpaceShuttle model =
@@ -100,7 +104,7 @@ keyDown keyCode =
         37 -> RotateLeft
 
     --  Arrow up
-        38 -> MoveUp
+        38 -> Thrust
 
     --  Arrow right
         39 -> RotateRight
