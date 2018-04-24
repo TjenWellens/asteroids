@@ -1,13 +1,14 @@
 module Data.SpaceShuttle exposing (..)
 
 import Data.Bullet exposing (Bullet)
-import Data.Position exposing (Heading, Position, Speed)
+import Data.Position exposing (Acceleration, Heading, Position, Speed)
 import Data.Universe exposing (Universe, reappear)
 
 type alias SpaceShuttle =
     { position: Position
     , heading: Heading
     , speed: Speed
+    , acceleration: Acceleration
     }
 
 gun: SpaceShuttle -> Position
