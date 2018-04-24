@@ -1,23 +1,21 @@
 module Data.Bullet exposing (..)
 
+import Data.Position exposing (Heading, Position, move)
+
 type alias Bullet =
-    { x: Int
-    , y: Int
-    , dx: Int
-    , dy: Int
+    { position: Position
+    , heading: Heading
     , range: Int
     }
 
 update: Bullet -> Bullet
 update bullet =
     let
-        dx = bullet.dx
-        dy = bullet.dy
-        x = bullet.x + dx
-        y = bullet.y + dy
+        position = move bullet.position bullet.heading
+        heading = bullet.heading
         range = bullet.range - 1
     in
-        Bullet x y dx dy range
+        Bullet position heading range
 
 alive: Bullet -> Bool
 alive bullet = bullet.range > 0

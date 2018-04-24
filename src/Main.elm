@@ -1,6 +1,7 @@
 module Main exposing (main)
 
 import Data.Bullet as Bullet exposing (Bullet)
+import Data.Position exposing (Heading, Position)
 import Html exposing (Html)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
@@ -61,7 +62,7 @@ update msg model =
 fire: Model -> Model
 fire model =
     let
-        bullet = Bullet 50 40 0 -1 10
+        bullet = Bullet (Position 50 40) (Heading 0 -1) 10
     in
         { model | bullets = bullet :: model.bullets }
 
