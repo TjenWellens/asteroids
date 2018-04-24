@@ -11,8 +11,10 @@ drawSpaceShuttle spaceShuttle =
 
 toPoints: SpaceShuttle -> String
 toPoints spaceShuttle =
-    spaceShuttle
-        |> toPositions
+    [ Position  0 -6
+    , Position -3  3
+    , Position  3  3
+    ]
         |> List.map (rotate spaceShuttle.position spaceShuttle.heading)
         |> List.map positionToPoint
         |> List.foldl concatWithSpace ""
@@ -24,16 +26,6 @@ positionToPoint: Position -> String
 positionToPoint position =
     ((toString position.x) ++ "," ++ (toString position.y))
 
-toPositions: SpaceShuttle -> List Position
-toPositions spaceShuttle =
-    let
-        p=spaceShuttle.position
-    in
-        [ translate p  0 -6
-        , translate p -3  3
-        , translate p  3  3
-        ]
-
 translate: Position -> Int -> Int -> Position
 translate p dx dy =
     Position (p.x + toFloat dx) (p.y + toFloat dy)
@@ -41,10 +33,10 @@ translate p dx dy =
 rotate: Position -> Heading -> Position -> Position
 rotate center heading position =
     let
-        angle = getAngleFromHeading heading
+        angle = (getAngleFromHeading heading) + (turns 0.25)
 
-        x = position.x - center.x
-        y = position.y - center.y
+        x = position.x
+        y = position.y
 
 --      C11 = A11 B11 + A12 B21
         rotate_x= cos angle * x - sin angle * y
@@ -59,4 +51,4 @@ rotate center heading position =
 
 getAngleFromHeading: Heading -> Float
 getAngleFromHeading heading =
-    atan2 (toFloat heading.dx) (toFloat heading.dy)
+    atan2 (toFloat heading.dy) (toFloat heading.dx)
