@@ -43,6 +43,10 @@ type Msg
   = Tick Time
   | KeyDown KeyCode
   | FireBullet
+  | RotateLeft
+  | MoveUp
+  | RotateRight
+  | MoveDown
   | UpdateBullets
 
 
@@ -58,12 +62,29 @@ update msg model =
 
     UpdateBullets -> (updateBullets model, Cmd.none)
 
+    RotateLeft -> (model, Cmd.none)
+    MoveUp -> (model, Cmd.none)
+    RotateRight -> (model, Cmd.none)
+    MoveDown -> (model, Cmd.none)
+
 
 keyDown: KeyCode -> Model -> (Model, Cmd Msg)
 keyDown keyCode model =
     case keyCode of
     --  Space
         32 -> update FireBullet model
+
+    --  Arrow left
+        37 -> update RotateLeft model
+
+    --  Arrow up
+        38 -> update MoveUp model
+
+    --  Arrow right
+        39 -> update RotateRight model
+
+    --  Arrow down
+        40 -> update MoveDown model
 
         _ -> (model, Cmd.none)
 
