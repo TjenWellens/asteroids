@@ -1,18 +1,19 @@
 module Views.SpaceShuttle exposing (drawSpaceShuttle)
 
-import Data.Position exposing (Position)
+import Data.Position exposing (Heading, Position)
 import Data.SpaceShuttle exposing (SpaceShuttle)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 
 drawSpaceShuttle: SpaceShuttle -> List (Svg msg)
 drawSpaceShuttle spaceShuttle =
-    [ polygon [ points (toPoints spaceShuttle), stroke "#FFFFFF" ] [] ]
+    [ polygon [ points (toPoints spaceShuttle), stroke "#aaaaaa" ] [] ]
 
 toPoints: SpaceShuttle -> String
 toPoints spaceShuttle =
     spaceShuttle
         |> toPositions
+        |> List.map (rotate spaceShuttle.position spaceShuttle.heading)
         |> List.map positionToPoint
         |> List.foldl concatWithSpace ""
 
@@ -35,4 +36,27 @@ toPositions spaceShuttle =
 
 translate: Position -> Int -> Int -> Position
 translate p dx dy =
-    Position (p.x + dx) (p.y + dy)
+    Position (p.x + toFloat dx) (p.y + toFloat dy)
+
+rotate: Position -> Heading -> Position -> Position
+rotate center heading position =
+    let
+        angle = getAngleFromHeading heading
+
+        x = position.x - center.x
+        y = position.y - center.y
+
+--      C11 = A11 B11 + A12 B21
+        rotate_x= cos angle * x - sin angle * y
+
+--      C21 = A21 B11 + A22 B21
+        rotate_y= sin angle * x + cos angle * y
+
+        newx = rotate_x + center.x
+        newy = rotate_y + center.y
+    in
+        Position newx newy
+
+getAngleFromHeading: Heading -> Float
+getAngleFromHeading heading =
+    atan2 (toFloat heading.dx) (toFloat heading.dy)

@@ -1,8 +1,8 @@
 module Data.Position exposing (..)
 
 type alias Position =
-    { x: Int
-    , y: Int
+    { x: Float
+    , y: Float
     }
 
 type alias Heading =
@@ -14,4 +14,8 @@ type alias Velocity = Int
 
 move: Position -> Heading -> Velocity -> Position
 move position heading speed =
-    Position (position.x + heading.dx * speed) (position.y + heading.dy * speed)
+    let
+        x = position.x + toFloat (heading.dx * speed)
+        y = position.y + toFloat (heading.dy * speed)
+    in
+        Position x y

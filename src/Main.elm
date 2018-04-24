@@ -64,11 +64,20 @@ update msg model =
 
     UpdateBullets -> (updateBullets model, Cmd.none)
 
-    RotateLeft -> (model, Cmd.none)
-    MoveUp -> (model, Cmd.none)
-    RotateRight -> (model, Cmd.none)
-    MoveDown -> (model, Cmd.none)
+    RotateLeft -> (rotate model (Heading -1 0), Cmd.none)
+    MoveUp -> (rotate model (Heading 0 1), Cmd.none)
+    RotateRight -> (rotate model (Heading 1 0), Cmd.none)
+    MoveDown -> (rotate model (Heading 0 -1), Cmd.none)
 
+
+
+rotate: Model -> Heading -> Model
+rotate model heading =
+    {model|spaceShuttle = (rotateSpaceShuttle model.spaceShuttle heading)}
+
+rotateSpaceShuttle: SpaceShuttle -> Heading -> SpaceShuttle
+rotateSpaceShuttle spaceShuttle heading =
+    {spaceShuttle|heading=heading}
 
 keyDown: KeyCode -> Model -> (Model, Cmd Msg)
 keyDown keyCode model =
@@ -119,7 +128,7 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
-    svg [ viewBox "0 0 100 100", width "300px" ]
+    svg [ viewBox "0 0 200 200", width "600px" ]
         (
         []
         ++ clock model.time
