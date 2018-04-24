@@ -2,13 +2,14 @@ module Main exposing (main)
 
 import Data.Bullet as Bullet exposing (Bullet)
 import Data.Position as Position exposing (Heading, Position, Velocity)
+import Data.SpaceShuttle exposing (SpaceShuttle)
 import Html exposing (Html)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 import Time exposing (Time, second)
 import Keyboard exposing (KeyCode)
 import Views.Clock exposing (clock)
-import Views.SpaceShuttle exposing (spaceShuttle)
+import Views.SpaceShuttle exposing (drawSpaceShuttle)
 import Views.Bullet exposing (bullets)
 
 
@@ -26,13 +27,14 @@ main =
 -- MODEL
 type alias Model =
     { time: Time
+    , spaceShuttle: SpaceShuttle
     , bullets: List Bullet
     }
 
 
 init : (Model, Cmd Msg)
 init =
-  (Model 0 [], Cmd.none)
+  (Model 0 (SpaceShuttle (Position 50 50) (Heading 0 0) 0) [], Cmd.none)
 
 
 
@@ -121,6 +123,6 @@ view model =
         (
         []
         ++ clock model.time
-        ++ spaceShuttle model
+        ++ drawSpaceShuttle model.spaceShuttle
         ++ bullets model.bullets
         )
