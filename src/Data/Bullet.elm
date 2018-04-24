@@ -9,7 +9,7 @@ type alias Bullet =
     , range: Int
     }
 
-move: Bullet -> Bullet
+move: Bullet -> Maybe Bullet
 move bullet =
     let
         position = Position.move bullet.position bullet.heading bullet.speed
@@ -17,7 +17,7 @@ move bullet =
         speed = bullet.speed
         range = bullet.range - 1
     in
-        Bullet position heading speed range
-
-alive: Bullet -> Bool
-alive bullet = bullet.range > 0
+        if bullet.range > 0 then
+            Just (Bullet position heading speed range)
+        else
+            Nothing
