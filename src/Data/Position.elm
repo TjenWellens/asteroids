@@ -10,6 +10,8 @@ type alias Heading =
     , dy: Int
     }
 
-move: Position -> Heading -> Position
-move position heading =
-    Position (position.x + heading.dx) (position.y + heading.dy)
+type alias Velocity = Int
+
+move: Position -> Heading -> Velocity -> Position
+move position heading speed =
+    Position (position.x + heading.dx * speed) (position.y + heading.dy * speed)
