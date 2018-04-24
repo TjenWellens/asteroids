@@ -29,3 +29,12 @@ fire spaceShuttle =
         heading = spaceShuttle.heading
     in
         Bullet position heading 2 10
+
+move: SpaceShuttle -> SpaceShuttle
+move spaceShuttle =
+    let
+        x = spaceShuttle.position.x + toFloat spaceShuttle.heading.dx * toFloat spaceShuttle.speed
+        y = spaceShuttle.position.y + toFloat spaceShuttle.heading.dy * toFloat spaceShuttle.speed
+        newPosition = Position x y
+    in
+        {spaceShuttle|position = newPosition}

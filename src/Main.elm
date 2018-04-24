@@ -56,8 +56,7 @@ type Msg
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
-    Tick newTime ->
-        update UpdateBullets { model | time = newTime }
+    Tick newTime -> (tick newTime model, Cmd.none)
 
     KeyDown keycode -> update (keyDown keycode) model
 
@@ -72,7 +71,15 @@ update msg model =
 
     NOOP -> (model, Cmd.none)
 
+tick: Time -> Model -> Model
+tick newTime model =
+    model
+        |> tickTime newTime
+        |> updateBullets
 
+tickTime: Time -> Model -> Model
+tickTime newTime model =
+    { model | time = newTime }
 
 rotate: Model -> Heading -> Model
 rotate model heading =
