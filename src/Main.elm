@@ -137,7 +137,8 @@ updateBullets: Model -> Model
 updateBullets model =
     let
         bullets = model.bullets
-            |> List.filterMap Bullet.move
+            |> List.map Bullet.move
+            |> List.filter Bullet.alive
     in
         { model | bullets = bullets }
 
