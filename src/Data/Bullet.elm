@@ -1,11 +1,11 @@
 module Data.Bullet exposing (..)
 
-import Data.Position as Position exposing (Heading, Position, Velocity, move)
+import Data.Position as Position exposing (Heading, Position, Speed, move)
 
 type alias Bullet =
     { position: Position
     , heading: Heading
-    , speed: Velocity
+    , speed: Speed
     , range: Int
     }
 

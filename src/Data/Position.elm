@@ -10,9 +10,9 @@ type alias Heading =
     , dy: Int
     }
 
-type alias Velocity = Int
+type alias Speed = Int
 
-move: Position -> Heading -> Velocity -> Position
+move: Position -> Heading -> Speed -> Position
 move position heading speed =
     let
         x = position.x + toFloat (heading.dx * speed)
