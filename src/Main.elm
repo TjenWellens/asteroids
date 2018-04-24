@@ -83,8 +83,8 @@ tick newTime model =
         |> tickTime newTime
         |> updateBullets
         |> do SpaceShuttle.move
-        |> do (Universe.reappearIfNeeded model.universe)
-        |> dobs (Universe.reappearIfNeeded model.universe)
+        |> do (Universe.reappear model.universe)
+        |> dobs (Universe.reappear model.universe)
 
 do: (SpaceShuttle -> SpaceShuttle) -> Model -> Model
 do mapper model =
