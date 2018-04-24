@@ -1,5 +1,6 @@
 module Data.SpaceShuttle exposing (..)
 
+import Data.Bullet exposing (Bullet)
 import Data.Position exposing (Heading, Position, Velocity)
 
 type alias SpaceShuttle =
@@ -20,3 +21,11 @@ gun spaceShuttle =
 rotate: SpaceShuttle -> Heading -> SpaceShuttle
 rotate spaceShuttle heading =
     {spaceShuttle|heading=heading}
+
+fire: SpaceShuttle -> Bullet
+fire spaceShuttle =
+    let
+        position = gun spaceShuttle
+        heading = spaceShuttle.heading
+    in
+        Bullet position heading 2 10

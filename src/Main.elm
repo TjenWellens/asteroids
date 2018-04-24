@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Data.Bullet as Bullet exposing (Bullet)
 import Data.Position as Position exposing (Heading, Position, Velocity)
-import Data.SpaceShuttle as SpaceShuttle exposing (SpaceShuttle, gun)
+import Data.SpaceShuttle as SpaceShuttle exposing (SpaceShuttle)
 import Html exposing (Html)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
@@ -101,9 +101,7 @@ keyDown keyCode =
 fire: Model -> Model
 fire model =
     let
-        position = gun model.spaceShuttle
-        heading = model.spaceShuttle.heading
-        bullet = Bullet position heading 2 10
+        bullet = SpaceShuttle.fire model.spaceShuttle
     in
         { model | bullets = bullet :: model.bullets }
 
