@@ -34,7 +34,7 @@ type alias Model =
 
 init : (Model, Cmd Msg)
 init =
-  (Model 0 (SpaceShuttle (Position 50 50) (Heading 0 0) 0) [], Cmd.none)
+  (Model 0 (SpaceShuttle (Position 50 50) (Heading 0 0) 1) [], Cmd.none)
 
 
 
@@ -76,6 +76,11 @@ tick newTime model =
     model
         |> tickTime newTime
         |> updateBullets
+        |> moveSpaceShuttle
+
+moveSpaceShuttle: Model -> Model
+moveSpaceShuttle model =
+    {model | spaceShuttle = SpaceShuttle.move model.spaceShuttle}
 
 tickTime: Time -> Model -> Model
 tickTime newTime model =
