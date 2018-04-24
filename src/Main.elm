@@ -6,7 +6,7 @@ import Html exposing (Html)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 import Time exposing (Time, second)
-import Keyboard
+import Keyboard exposing (KeyCode)
 import Views.Clock exposing (clock)
 import Views.SpaceShuttle exposing (spaceShuttle)
 import Views.Bullet exposing (bullets)
@@ -41,7 +41,7 @@ init =
 
 type Msg
   = Tick Time
-  | KeyMsg Keyboard.KeyCode
+  | KeyDown KeyCode
   | FireBullet
   | UpdateBullets
 
@@ -52,12 +52,20 @@ update msg model =
     Tick newTime ->
         update UpdateBullets { model | time = newTime }
 
-    KeyMsg keycode ->
-        update FireBullet model
+    KeyDown keycode -> keyDown keycode model
 
     FireBullet -> (fire model, Cmd.none)
 
     UpdateBullets -> (updateBullets model, Cmd.none)
+
+
+keyDown: KeyCode -> Model -> (Model, Cmd Msg)
+keyDown keyCode model =
+    case keyCode of
+    --  Space
+        32 -> update FireBullet model
+
+        _ -> (model, Cmd.none)
 
 fire: Model -> Model
 fire model =
@@ -78,7 +86,7 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
         [ Time.every second Tick
-        , Keyboard.downs KeyMsg
+        , Keyboard.downs KeyDown
         ]
 
 
