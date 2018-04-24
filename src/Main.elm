@@ -68,7 +68,7 @@ update msg model =
 
     FireBullet -> (fire model, Cmd.none)
 
-    UpdateBullets -> (updateBullets model, Cmd.none)
+    UpdateBullets -> (filterLiveBullets model, Cmd.none)
 
     RotateLeft -> (rotate model (Heading -1 0), Cmd.none)
     Thrust -> (do SpaceShuttle.thrust model, Cmd.none)
@@ -81,7 +81,8 @@ tick: Time -> Model -> Model
 tick newTime model =
     model
         |> tickTime newTime
-        |> updateBullets
+        |> dobs Bullet.move
+        |> filterLiveBullets
         |> do SpaceShuttle.move
         |> do (Universe.reappear model.universe)
         |> dobs (Universe.reappear model.universe)
@@ -133,11 +134,10 @@ fire model =
     in
         { model | bullets = bullet :: model.bullets }
 
-updateBullets: Model -> Model
-updateBullets model =
+filterLiveBullets: Model -> Model
+filterLiveBullets model =
     let
         bullets = model.bullets
-            |> List.map Bullet.move
             |> List.filter Bullet.alive
     in
         { model | bullets = bullets }
