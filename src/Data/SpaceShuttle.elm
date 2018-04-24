@@ -28,7 +28,7 @@ fire spaceShuttle =
     let
         position = gun spaceShuttle
         heading = spaceShuttle.heading
-        speed = 2
+        speed = spaceShuttle.speed + 4
         range = 10
     in
         Bullet position heading speed range
