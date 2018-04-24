@@ -107,7 +107,12 @@ fire model =
 
 updateBullets: Model -> Model
 updateBullets model =
-    { model | bullets = Bullet.updateAll model.bullets }
+    let
+        bullets = model.bullets
+            |> List.map Bullet.move
+            |> List.filter Bullet.alive
+    in
+        { model | bullets = bullets }
 
 
 -- SUBSCRIPTIONS

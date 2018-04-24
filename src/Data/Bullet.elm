@@ -1,6 +1,6 @@
 module Data.Bullet exposing (..)
 
-import Data.Position exposing (Heading, Position, Velocity, move)
+import Data.Position as Position exposing (Heading, Position, Velocity, move)
 
 type alias Bullet =
     { position: Position
@@ -9,10 +9,10 @@ type alias Bullet =
     , range: Int
     }
 
-update: Bullet -> Bullet
-update bullet =
+move: Bullet -> Bullet
+move bullet =
     let
-        position = move bullet.position bullet.heading bullet.speed
+        position = Position.move bullet.position bullet.heading bullet.speed
         heading = bullet.heading
         speed = bullet.speed
         range = bullet.range - 1
@@ -21,9 +21,3 @@ update bullet =
 
 alive: Bullet -> Bool
 alive bullet = bullet.range > 0
-
-updateAll: List Bullet -> List Bullet
-updateAll bullets =
-    bullets
-        |> List.map update
-        |> List.filter alive
