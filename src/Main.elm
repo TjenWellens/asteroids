@@ -85,6 +85,7 @@ tick newTime model =
         |> filterLiveBullets
         |> do SpaceShuttle.move
         |> do (Universe.reappear model.universe)
+        |> do SpaceShuttle.accelerate
         |> dobs (Universe.reappear model.universe)
 
 do: (SpaceShuttle -> SpaceShuttle) -> Model -> Model

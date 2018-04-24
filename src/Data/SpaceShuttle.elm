@@ -45,4 +45,11 @@ move spaceShuttle =
 
 thrust: SpaceShuttle -> SpaceShuttle
 thrust spaceShuttle =
-    {spaceShuttle|speed = spaceShuttle.speed + 1}
+    {spaceShuttle|acceleration = 1}
+
+accelerate: SpaceShuttle -> SpaceShuttle
+accelerate spaceShuttle =
+    { spaceShuttle
+        | speed = spaceShuttle.speed + spaceShuttle.acceleration
+        , acceleration = 0
+    }
