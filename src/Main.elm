@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Data.Bullet as Bullet exposing (Bullet)
 import Data.Position as Position exposing (Heading, Position, Velocity)
-import Data.SpaceShuttle exposing (SpaceShuttle)
+import Data.SpaceShuttle exposing (SpaceShuttle, gun)
 import Html exposing (Html)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
@@ -65,9 +65,9 @@ update msg model =
     UpdateBullets -> (updateBullets model, Cmd.none)
 
     RotateLeft -> (rotate model (Heading -1 0), Cmd.none)
-    MoveUp -> (rotate model (Heading 0 1), Cmd.none)
+    MoveUp -> (rotate model (Heading 0 -1), Cmd.none)
     RotateRight -> (rotate model (Heading 1 0), Cmd.none)
-    MoveDown -> (rotate model (Heading 0 -1), Cmd.none)
+    MoveDown -> (rotate model (Heading 0 1), Cmd.none)
 
 
 
@@ -102,7 +102,9 @@ keyDown keyCode model =
 fire: Model -> Model
 fire model =
     let
-        bullet = Bullet (Position 50 40) (Heading 0 -1) 2 10
+        position = gun model.spaceShuttle
+        heading = model.spaceShuttle.heading
+        bullet = Bullet position heading 2 10
     in
         { model | bullets = bullet :: model.bullets }
 

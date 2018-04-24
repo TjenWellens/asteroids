@@ -7,3 +7,12 @@ type alias SpaceShuttle =
     , heading: Heading
     , speed: Velocity
     }
+
+gun: SpaceShuttle -> Position
+gun spaceShuttle =
+    let
+        gunDistance = 7.0
+        x = spaceShuttle.position.x + toFloat spaceShuttle.heading.dx * gunDistance
+        y = spaceShuttle.position.y + toFloat spaceShuttle.heading.dy * gunDistance
+    in
+        Position x y
