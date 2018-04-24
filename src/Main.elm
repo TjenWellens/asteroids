@@ -3,6 +3,7 @@ module Main exposing (main)
 import Data.Bullet as Bullet exposing (Bullet)
 import Data.Position as Position exposing (Heading, Position, Velocity)
 import Data.SpaceShuttle as SpaceShuttle exposing (SpaceShuttle)
+import Data.Universe as Universe exposing (Universe)
 import Html exposing (Html)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
@@ -29,12 +30,17 @@ type alias Model =
     { time: Time
     , spaceShuttle: SpaceShuttle
     , bullets: List Bullet
+    , universe: Universe
     }
 
 
 init : (Model, Cmd Msg)
 init =
-  (Model 0 (SpaceShuttle (Position 50 50) (Heading 0 0) 1) [], Cmd.none)
+  (Model 0
+  (SpaceShuttle (Position 50 50) (Heading 0 0) 1)
+  []
+  (Universe 200 200)
+  , Cmd.none)
 
 
 
@@ -77,6 +83,7 @@ tick newTime model =
         |> tickTime newTime
         |> updateBullets
         |> do SpaceShuttle.move
+        |> do (Universe.reappearIfNeeded model.universe)
 
 do: (SpaceShuttle -> SpaceShuttle) -> Model -> Model
 do action model =
