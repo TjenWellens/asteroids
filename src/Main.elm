@@ -84,10 +84,15 @@ tick newTime model =
         |> updateBullets
         |> do SpaceShuttle.move
         |> do (Universe.reappearIfNeeded model.universe)
+        |> dobs (Universe.reappearIfNeeded model.universe)
 
 do: (SpaceShuttle -> SpaceShuttle) -> Model -> Model
-do action model =
-    {model|spaceShuttle = action model.spaceShuttle}
+do mapper model =
+    {model|spaceShuttle = mapper model.spaceShuttle}
+
+dobs: (Bullet -> Bullet) -> Model -> Model
+dobs mapper model =
+    {model|bullets = List.map mapper model.bullets}
 
 moveSpaceShuttle: Model -> Model
 moveSpaceShuttle model =
