@@ -16,3 +16,7 @@ gun spaceShuttle =
         y = spaceShuttle.position.y + toFloat spaceShuttle.heading.dy * gunDistance
     in
         Position x y
+
+rotate: SpaceShuttle -> Heading -> SpaceShuttle
+rotate spaceShuttle heading =
+    {spaceShuttle|heading=heading}

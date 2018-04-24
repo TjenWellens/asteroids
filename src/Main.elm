@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Data.Bullet as Bullet exposing (Bullet)
 import Data.Position as Position exposing (Heading, Position, Velocity)
-import Data.SpaceShuttle exposing (SpaceShuttle, gun)
+import Data.SpaceShuttle as SpaceShuttle exposing (SpaceShuttle, gun)
 import Html exposing (Html)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
@@ -50,6 +50,7 @@ type Msg
   | RotateRight
   | MoveDown
   | UpdateBullets
+  | NOOP
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -58,7 +59,7 @@ update msg model =
     Tick newTime ->
         update UpdateBullets { model | time = newTime }
 
-    KeyDown keycode -> keyDown keycode model
+    KeyDown keycode -> update (keyDown keycode) model
 
     FireBullet -> (fire model, Cmd.none)
 
@@ -69,35 +70,33 @@ update msg model =
     RotateRight -> (rotate model (Heading 1 0), Cmd.none)
     MoveDown -> (rotate model (Heading 0 1), Cmd.none)
 
+    NOOP -> (model, Cmd.none)
+
 
 
 rotate: Model -> Heading -> Model
 rotate model heading =
-    {model|spaceShuttle = (rotateSpaceShuttle model.spaceShuttle heading)}
+    {model|spaceShuttle = (SpaceShuttle.rotate model.spaceShuttle heading)}
 
-rotateSpaceShuttle: SpaceShuttle -> Heading -> SpaceShuttle
-rotateSpaceShuttle spaceShuttle heading =
-    {spaceShuttle|heading=heading}
-
-keyDown: KeyCode -> Model -> (Model, Cmd Msg)
-keyDown keyCode model =
+keyDown: KeyCode -> Msg
+keyDown keyCode =
     case keyCode of
     --  Space
-        32 -> update FireBullet model
+        32 -> FireBullet
 
     --  Arrow left
-        37 -> update RotateLeft model
+        37 -> RotateLeft
 
     --  Arrow up
-        38 -> update MoveUp model
+        38 -> MoveUp
 
     --  Arrow right
-        39 -> update RotateRight model
+        39 -> RotateRight
 
     --  Arrow down
-        40 -> update MoveDown model
+        40 -> MoveDown
 
-        _ -> (model, Cmd.none)
+        _ -> NOOP
 
 fire: Model -> Model
 fire model =
