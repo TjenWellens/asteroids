@@ -27,10 +27,6 @@ positionToPoint: Position -> String
 positionToPoint position =
     ((toString position.x) ++ "," ++ (toString position.y))
 
-translate: Position -> Int -> Int -> Position
-translate p dx dy =
-    Position (p.x + toFloat dx) (p.y + toFloat dy)
-
 rotate: Position -> Heading -> Position -> Position
 rotate center heading position =
     let
