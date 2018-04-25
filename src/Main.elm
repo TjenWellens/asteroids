@@ -53,8 +53,8 @@ type Msg
   | KeyDown KeyCode
   | FireBullet
   | RotateLeft
-  | Thrust
   | RotateRight
+  | Thrust
   | UpdateBullets
   | NOOP
 
@@ -71,8 +71,8 @@ update msg model =
     UpdateBullets -> (filterLiveBullets model, Cmd.none)
 
     RotateLeft -> (do (SpaceShuttle.rotate Momentum.counterClockwise) model, Cmd.none)
-    Thrust -> (do SpaceShuttle.thrust model, Cmd.none)
     RotateRight -> (do (SpaceShuttle.rotate Momentum.clockwise) model, Cmd.none)
+    Thrust -> (do SpaceShuttle.thrust model, Cmd.none)
 
     NOOP -> (model, Cmd.none)
 
