@@ -8,7 +8,7 @@ import Data.Universe exposing (Universe, reappear)
 type alias SpaceShuttle =
     { position: Position
     , momentum: Momentum
-    , acceleration: Acceleration
+    , acceleration: Momentum
     }
 
 gun: SpaceShuttle -> Position
@@ -40,15 +40,18 @@ move spaceShuttle =
 
 thrust: SpaceShuttle -> SpaceShuttle
 thrust spaceShuttle =
-    {spaceShuttle|acceleration = 1}
+    let
+        momentum = spaceShuttle.momentum
+        acceleration = {momentum | speed = 1}
+    in
+        {spaceShuttle|acceleration = acceleration}
 
 accelerate: SpaceShuttle -> SpaceShuttle
 accelerate spaceShuttle =
     let
-        newSpeed = spaceShuttle.momentum.speed + spaceShuttle.acceleration
-        newAcceleration = 0
-        oldMomentum = spaceShuttle.momentum
-        newMomentum = {oldMomentum|speed = newSpeed}
+        oldAcceleration = spaceShuttle.acceleration
+        newMomentum = Momentum.combine spaceShuttle.momentum spaceShuttle.acceleration
+        newAcceleration = {oldAcceleration|speed = 0}
     in
         { spaceShuttle
             | momentum = newMomentum
@@ -57,4 +60,14 @@ accelerate spaceShuttle =
 
 rotate: Rotation -> SpaceShuttle -> SpaceShuttle
 rotate rotation spaceShuttle =
-    {spaceShuttle|momentum = Momentum.rotate rotation spaceShuttle.momentum}
+    let
+        newHeading = (Momentum.rotate rotation spaceShuttle.momentum).heading
+        oldMomentum     = spaceShuttle.momentum
+        oldAcceleration = spaceShuttle.acceleration
+        newMomentum     = {oldMomentum     | heading = newHeading}
+        newAcceleration = {oldAcceleration | heading = newHeading}
+    in
+        { spaceShuttle
+            | momentum = newMomentum
+            , acceleration = newAcceleration
+        }

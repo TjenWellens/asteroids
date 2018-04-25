@@ -68,3 +68,11 @@ move {heading, speed} position =
         y = position.y + toFloat (heading.dy * speed)
     in
         Position x y
+
+combine: Momentum -> Momentum -> Momentum
+combine momentum acceleration =
+    let
+        heading = acceleration.heading
+        speed = momentum.speed + acceleration.speed
+    in
+        Momentum heading speed
