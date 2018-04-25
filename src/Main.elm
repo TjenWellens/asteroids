@@ -1,7 +1,7 @@
 module Main exposing (main)
 
 import Data.Bullet as Bullet exposing (Bullet)
-import Data.Momentum as Momentum exposing (Heading, Momentum, Speed)
+import Data.Momentum as Momentum exposing (Momentum)
 import Data.Position as Position exposing (Position)
 import Data.SpaceShuttle as SpaceShuttle exposing (SpaceShuttle)
 import Data.Universe as Universe exposing (Universe)
