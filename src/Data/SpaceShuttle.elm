@@ -41,10 +41,10 @@ move spaceShuttle =
 thrust: SpaceShuttle -> SpaceShuttle
 thrust spaceShuttle =
     let
-        momentum = spaceShuttle.momentum
-        acceleration = {momentum | speed = 1}
+        oldAcceleration = spaceShuttle.acceleration
+        newAcceleration = {oldAcceleration | speed = 1}
     in
-        {spaceShuttle|acceleration = acceleration}
+        {spaceShuttle|acceleration = newAcceleration}
 
 accelerate: SpaceShuttle -> SpaceShuttle
 accelerate spaceShuttle =
@@ -61,13 +61,6 @@ accelerate spaceShuttle =
 rotate: Rotation -> SpaceShuttle -> SpaceShuttle
 rotate rotation spaceShuttle =
     let
-        newHeading = (Momentum.rotate rotation spaceShuttle.momentum).heading
-        oldMomentum     = spaceShuttle.momentum
-        oldAcceleration = spaceShuttle.acceleration
-        newMomentum     = {oldMomentum     | heading = newHeading}
-        newAcceleration = {oldAcceleration | heading = newHeading}
+        newAcceleration = Momentum.rotate rotation spaceShuttle.acceleration
     in
-        { spaceShuttle
-            | momentum = newMomentum
-            , acceleration = newAcceleration
-        }
+        { spaceShuttle | acceleration = newAcceleration }

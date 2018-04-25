@@ -69,10 +69,37 @@ move {heading, speed} position =
     in
         Position x y
 
+sum: Heading -> Heading -> Heading
+sum a b =
+    Heading (a.dx + b.dx) (a.dy + b.dy)
+
+times: Heading -> Float -> Heading
+times a n =
+    Heading (a.dx * n) (a.dy * n)
+
+divide: Heading -> Float -> Heading
+divide a n =
+    Heading (a.dx / n) (a.dy / n)
+
 combine: Momentum -> Momentum -> Momentum
 combine momentum acceleration =
+    case (momentum.speed, acceleration.speed) of
+        (0,0) -> none
+        (1,0) -> momentum
+        (0,1) -> acceleration
+        _ -> weighedCombine momentum acceleration
+
+weighedCombine: Momentum -> Momentum -> Momentum
+weighedCombine momentum acceleration =
     let
-        heading = acceleration.heading
         speed = momentum.speed + acceleration.speed
+        heading =
+            ( divide
+                ( sum
+                    (times momentum.heading (toFloat momentum.speed))
+                    (times acceleration.heading (toFloat acceleration.speed))
+                )
+                (toFloat speed)
+            )
     in
         Momentum heading speed
