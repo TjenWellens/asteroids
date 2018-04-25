@@ -70,9 +70,9 @@ update msg model =
 
     UpdateBullets -> (filterLiveBullets model, Cmd.none)
 
-    RotateLeft -> (do (rotate counterClockwise) model, Cmd.none)
+    RotateLeft -> (do (rotate Heading.counterClockwise) model, Cmd.none)
     Thrust -> (do SpaceShuttle.thrust model, Cmd.none)
-    RotateRight -> (do (rotate clockwise) model, Cmd.none)
+    RotateRight -> (do (rotate Heading.clockwise) model, Cmd.none)
 
     NOOP -> (model, Cmd.none)
 
@@ -106,24 +106,6 @@ tickTime newTime model =
 rotate: (Heading -> Heading) -> SpaceShuttle -> SpaceShuttle
 rotate changeDirection spaceShuttle =
     {spaceShuttle|heading = (changeDirection spaceShuttle.heading)}
-
-clockwise: Heading -> Heading
-clockwise {dx, dy} =
-    case (dx, dy) of
-        ( 0, -1) -> Heading.e
-        ( 1,  0) -> Heading.s
-        ( 0,  1) -> Heading.w
-        (-1,  0) -> Heading.n
-        _ -> Heading  0 0
-
-counterClockwise: Heading -> Heading
-counterClockwise {dx, dy} =
-    case (dx, dy) of
-        ( 0, -1) -> Heading.w
-        ( 1,  0) -> Heading.n
-        ( 0,  1) -> Heading.e
-        (-1,  0) -> Heading.s
-        _ -> Heading  0 0
 
 keyDown: KeyCode -> Msg
 keyDown keyCode =
