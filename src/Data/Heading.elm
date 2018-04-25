@@ -5,6 +5,8 @@ type alias Heading =
     , dy: Int
     }
 
+type alias Speed = Int
+
 n = Heading  0 -1
 e = Heading  1  0
 s = Heading  0  1

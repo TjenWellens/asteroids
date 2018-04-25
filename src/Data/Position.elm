@@ -1,13 +1,11 @@
 module Data.Position exposing (..)
 
-import Data.Heading exposing (Heading)
+import Data.Heading exposing (Heading, Speed)
 
 type alias Position =
     { x: Float
     , y: Float
     }
-
-type alias Speed = Int
 
 type alias Acceleration = Int
 

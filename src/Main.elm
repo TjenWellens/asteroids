@@ -1,8 +1,8 @@
 module Main exposing (main)
 
 import Data.Bullet as Bullet exposing (Bullet)
-import Data.Heading as Heading exposing (Heading)
-import Data.Position as Position exposing (Position, Speed)
+import Data.Heading as Heading exposing (Heading, Speed)
+import Data.Position as Position exposing (Position)
 import Data.SpaceShuttle as SpaceShuttle exposing (SpaceShuttle)
 import Data.Universe as Universe exposing (Universe)
 import Html exposing (Html)
