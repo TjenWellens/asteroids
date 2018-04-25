@@ -17,8 +17,8 @@ e = Heading  1  0
 s = Heading  0  1
 w = Heading -1  0
 
-clockwise: Heading -> Heading
-clockwise {dx, dy} =
+clockwiseHeading: Heading -> Heading
+clockwiseHeading {dx, dy} =
     case (dx, dy) of
         ( 0, -1) -> e
         ( 1,  0) -> s
@@ -26,11 +26,21 @@ clockwise {dx, dy} =
         (-1,  0) -> n
         _ -> Heading  0 0
 
-counterClockwise: Heading -> Heading
-counterClockwise {dx, dy} =
+counterClockwiseHeading: Heading -> Heading
+counterClockwiseHeading {dx, dy} =
     case (dx, dy) of
         ( 0, -1) -> w
         ( 1,  0) -> n
         ( 0,  1) -> e
         (-1,  0) -> s
         _ -> Heading  0 0
+
+updateHeading: (Heading -> Heading) -> Momentum -> Momentum
+updateHeading changeDirection momentum =
+    {momentum|heading = changeDirection momentum.heading}
+
+clockwise: Momentum -> Momentum
+clockwise = updateHeading clockwiseHeading
+
+counterClockwise: Momentum -> Momentum
+counterClockwise = updateHeading counterClockwiseHeading

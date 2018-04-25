@@ -7,8 +7,7 @@ import Data.Universe exposing (Universe, reappear)
 
 type alias SpaceShuttle =
     { position: Position
-    , heading: Heading
-    , speed: Speed
+    , momentum: Momentum
     , acceleration: Acceleration
     }
 
@@ -16,21 +15,21 @@ gun: SpaceShuttle -> Position
 gun spaceShuttle =
     let
         gunDistance = 7.0
-        x = spaceShuttle.position.x + toFloat spaceShuttle.heading.dx * gunDistance
-        y = spaceShuttle.position.y + toFloat spaceShuttle.heading.dy * gunDistance
+        x = spaceShuttle.position.x + toFloat spaceShuttle.momentum.heading.dx * gunDistance
+        y = spaceShuttle.position.y + toFloat spaceShuttle.momentum.heading.dy * gunDistance
     in
         Position x y
 
-rotate: SpaceShuttle -> Heading -> SpaceShuttle
-rotate spaceShuttle heading =
-    {spaceShuttle|heading=heading}
+--rotate: SpaceShuttle -> Heading -> SpaceShuttle
+--rotate spaceShuttle heading =
+--    {spaceShuttle|heading=heading}
 
 fire: SpaceShuttle -> Bullet
 fire spaceShuttle =
     let
         position = gun spaceShuttle
-        heading = spaceShuttle.heading
-        speed = spaceShuttle.speed + 4
+        heading = spaceShuttle.momentum.heading
+        speed = spaceShuttle.momentum.speed + 4
         momentum = Momentum heading speed
         range = 10
     in
@@ -39,8 +38,8 @@ fire spaceShuttle =
 move: SpaceShuttle -> SpaceShuttle
 move spaceShuttle =
     let
-        x = spaceShuttle.position.x + toFloat spaceShuttle.heading.dx * toFloat spaceShuttle.speed
-        y = spaceShuttle.position.y + toFloat spaceShuttle.heading.dy * toFloat spaceShuttle.speed
+        x = spaceShuttle.position.x + toFloat spaceShuttle.momentum.heading.dx * toFloat spaceShuttle.momentum.speed
+        y = spaceShuttle.position.y + toFloat spaceShuttle.momentum.heading.dy * toFloat spaceShuttle.momentum.speed
         newPosition = Position x y
     in
         {spaceShuttle|position = newPosition}
@@ -51,7 +50,13 @@ thrust spaceShuttle =
 
 accelerate: SpaceShuttle -> SpaceShuttle
 accelerate spaceShuttle =
-    { spaceShuttle
-        | speed = spaceShuttle.speed + spaceShuttle.acceleration
-        , acceleration = 0
-    }
+    let
+        newSpeed = spaceShuttle.momentum.speed + spaceShuttle.acceleration
+        newAcceleration = 0
+        oldMomentum = spaceShuttle.momentum
+        newMomentum = {oldMomentum|speed = newSpeed}
+    in
+        { spaceShuttle
+            | momentum = newMomentum
+            , acceleration = newAcceleration
+        }

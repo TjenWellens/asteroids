@@ -1,7 +1,7 @@
 module Main exposing (main)
 
 import Data.Bullet as Bullet exposing (Bullet)
-import Data.Momentum as Heading exposing (Heading, Speed)
+import Data.Momentum as Momentum exposing (Heading, Momentum, Speed)
 import Data.Position as Position exposing (Position)
 import Data.SpaceShuttle as SpaceShuttle exposing (SpaceShuttle)
 import Data.Universe as Universe exposing (Universe)
@@ -38,7 +38,7 @@ type alias Model =
 init : (Model, Cmd Msg)
 init =
   (Model 0
-  (SpaceShuttle (Position 50 50) Heading.s 0 0)
+  (SpaceShuttle (Position 50 50) (Momentum Momentum.s 0) 0)
   []
   (Universe 200 200)
   , Cmd.none)
@@ -70,9 +70,9 @@ update msg model =
 
     UpdateBullets -> (filterLiveBullets model, Cmd.none)
 
-    RotateLeft -> (do (rotate Heading.counterClockwise) model, Cmd.none)
+    RotateLeft -> (do (rotate Momentum.counterClockwise) model, Cmd.none)
     Thrust -> (do SpaceShuttle.thrust model, Cmd.none)
-    RotateRight -> (do (rotate Heading.clockwise) model, Cmd.none)
+    RotateRight -> (do (rotate Momentum.clockwise) model, Cmd.none)
 
     NOOP -> (model, Cmd.none)
 
@@ -103,9 +103,9 @@ tickTime: Time -> Model -> Model
 tickTime newTime model =
     { model | time = newTime }
 
-rotate: (Heading -> Heading) -> SpaceShuttle -> SpaceShuttle
+rotate: (Momentum -> Momentum) -> SpaceShuttle -> SpaceShuttle
 rotate changeDirection spaceShuttle =
-    {spaceShuttle|heading = (changeDirection spaceShuttle.heading)}
+    {spaceShuttle|momentum = (changeDirection spaceShuttle.momentum)}
 
 keyDown: KeyCode -> Msg
 keyDown keyCode =

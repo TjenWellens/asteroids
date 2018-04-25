@@ -16,7 +16,7 @@ toPoints spaceShuttle =
     , Position -3  3
     , Position  3  3
     ]
-        |> List.map (rotate spaceShuttle.position spaceShuttle.heading)
+        |> List.map (rotate spaceShuttle.position spaceShuttle.momentum.heading)
         |> List.map positionToPoint
         |> List.foldl concatWithSpace ""
 
