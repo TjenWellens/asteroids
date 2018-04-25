@@ -1,7 +1,7 @@
 module Data.Bullet exposing (..)
 
-import Data.Momentum exposing (Momentum)
-import Data.Position as Position exposing (Position, move)
+import Data.Momentum as Momentum exposing (Momentum)
+import Data.Position as Position exposing (Position)
 
 type alias Bullet =
     { position: Position
@@ -12,7 +12,7 @@ type alias Bullet =
 move: Bullet -> Bullet
 move bullet =
     let
-        position = Position.move bullet.position bullet.momentum.heading bullet.momentum.speed
+        position = Momentum.move bullet.momentum bullet.position
         momentum = bullet.momentum
         range = bullet.range - 1
     in

@@ -38,9 +38,7 @@ fire spaceShuttle =
 move: SpaceShuttle -> SpaceShuttle
 move spaceShuttle =
     let
-        x = spaceShuttle.position.x + toFloat spaceShuttle.momentum.heading.dx * toFloat spaceShuttle.momentum.speed
-        y = spaceShuttle.position.y + toFloat spaceShuttle.momentum.heading.dy * toFloat spaceShuttle.momentum.speed
-        newPosition = Position x y
+        newPosition = Momentum.move spaceShuttle.momentum spaceShuttle.position
     in
         {spaceShuttle|position = newPosition}
 

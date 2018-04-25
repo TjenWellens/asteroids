@@ -1,5 +1,7 @@
 module Data.Momentum exposing (..)
 
+import Data.Position as Position exposing (Position)
+
 type alias Momentum =
     { heading: Heading
     , speed: Speed
@@ -52,3 +54,11 @@ clockwise = updateHeading clockwiseHeading
 
 counterClockwise: Momentum -> Momentum
 counterClockwise = updateHeading counterClockwiseHeading
+
+move: Momentum -> Position -> Position
+move {heading, speed} position =
+    let
+        x = position.x + toFloat (heading.dx * speed)
+        y = position.y + toFloat (heading.dy * speed)
+    in
+        Position x y
