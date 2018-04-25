@@ -19,6 +19,11 @@ e = Heading  1  0
 s = Heading  0  1
 w = Heading -1  0
 
+toN = Momentum n 1
+toE = Momentum e 1
+toS = Momentum s 1
+toW = Momentum w 1
+
 type Rotation = Clockwise | CounterClockwise
 
 clockwiseHeading: Heading -> Heading

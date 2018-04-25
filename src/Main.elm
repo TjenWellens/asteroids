@@ -38,7 +38,7 @@ type alias Model =
 init : (Model, Cmd Msg)
 init =
   (Model 0
-  (SpaceShuttle (Position 50 50) (Momentum Momentum.s 0) 0)
+  (SpaceShuttle (Position 50 50) Momentum.toS 0)
   []
   (Universe 200 200)
   , Cmd.none)
