@@ -19,6 +19,7 @@ e = Heading  1  0
 s = Heading  0  1
 w = Heading -1  0
 
+none = Momentum n 0
 toN = Momentum n 1
 toE = Momentum e 1
 toS = Momentum s 1
