@@ -8,16 +8,16 @@ type alias Momentum =
     }
 
 type alias Heading =
-    { dx: Int
-    , dy: Int
+    { dx: Float
+    , dy: Float
     }
 
 type alias Speed = Int
 
-n = Heading  0 -1
-e = Heading  1  0
-s = Heading  0  1
-w = Heading -1  0
+n = Heading  0.0 -1.0
+e = Heading  1.0  0.0
+s = Heading  0.0  1.0
+w = Heading -1.0  0.0
 
 none = Momentum n 0
 toN = Momentum n 1
@@ -30,20 +30,20 @@ type Rotation = Clockwise | CounterClockwise
 clockwiseHeading: Heading -> Heading
 clockwiseHeading {dx, dy} =
     case (dx, dy) of
-        ( 0, -1) -> e
-        ( 1,  0) -> s
-        ( 0,  1) -> w
-        (-1,  0) -> n
-        _ -> Heading  0 0
+        ( 0.0, -1.0) -> e
+        ( 1.0,  0.0) -> s
+        ( 0.0,  1.0) -> w
+        (-1.0,  0.0) -> n
+        _ -> Heading  0.0 0.0
 
 counterClockwiseHeading: Heading -> Heading
 counterClockwiseHeading {dx, dy} =
     case (dx, dy) of
-        ( 0, -1) -> w
-        ( 1,  0) -> n
-        ( 0,  1) -> e
-        (-1,  0) -> s
-        _ -> Heading  0 0
+        ( 0.0, -1.0) -> w
+        ( 1.0,  0.0) -> n
+        ( 0.0,  1.0) -> e
+        (-1.0,  0.0) -> s
+        _ -> Heading  0.0 0.0
 
 updateHeading: (Heading -> Heading) -> Momentum -> Momentum
 updateHeading changeDirection momentum =
@@ -64,8 +64,8 @@ counterClockwise = updateHeading counterClockwiseHeading
 move: Momentum -> Position -> Position
 move {heading, speed} position =
     let
-        x = position.x + toFloat (heading.dx * speed)
-        y = position.y + toFloat (heading.dy * speed)
+        x = position.x + (heading.dx * toFloat speed)
+        y = position.y + (heading.dy * toFloat speed)
     in
         Position x y
 

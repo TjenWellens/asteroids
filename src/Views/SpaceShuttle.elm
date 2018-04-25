@@ -48,4 +48,4 @@ rotate center heading position =
 
 getAngleFromHeading: Heading -> Float
 getAngleFromHeading heading =
-    atan2 (toFloat heading.dy) (toFloat heading.dx)
+    atan2 (heading.dy) (heading.dx)
