@@ -20,10 +20,6 @@ gun spaceShuttle =
     in
         Position x y
 
---rotate: SpaceShuttle -> Heading -> SpaceShuttle
---rotate spaceShuttle heading =
---    {spaceShuttle|heading=heading}
-
 fire: SpaceShuttle -> Bullet
 fire spaceShuttle =
     let
