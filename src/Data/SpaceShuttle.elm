@@ -1,7 +1,7 @@
 module Data.SpaceShuttle exposing (..)
 
 import Data.Bullet exposing (Bullet)
-import Data.Heading exposing (Heading, Speed)
+import Data.Momentum exposing (Heading, Speed)
 import Data.Position exposing (Acceleration, Position)
 import Data.Universe exposing (Universe, reappear)
 

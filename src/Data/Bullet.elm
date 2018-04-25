@@ -1,6 +1,6 @@
 module Data.Bullet exposing (..)
 
-import Data.Heading exposing (Heading, Speed)
+import Data.Momentum exposing (Heading, Speed)
 import Data.Position as Position exposing (Position, move)
 
 type alias Bullet =

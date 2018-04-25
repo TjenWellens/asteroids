@@ -1,4 +1,4 @@
-module Data.Heading exposing (..)
+module Data.Momentum exposing (..)
 
 type alias Heading =
     { dx: Int

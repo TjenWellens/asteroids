@@ -1,6 +1,6 @@
 module Data.Position exposing (..)
 
-import Data.Heading exposing (Heading, Speed)
+import Data.Momentum exposing (Heading, Speed)
 
 type alias Position =
     { x: Float
