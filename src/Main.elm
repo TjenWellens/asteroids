@@ -1,7 +1,7 @@
 module Main exposing (main)
 
 import Data.Bullet as Bullet exposing (Bullet)
-import Data.Momentum as Momentum exposing (Momentum)
+import Data.Momentum as Momentum exposing (Momentum, Rotation(Clockwise, CounterClockwise))
 import Data.Position as Position exposing (Position)
 import Data.SpaceShuttle as SpaceShuttle exposing (SpaceShuttle)
 import Data.Universe as Universe exposing (Universe)
@@ -70,8 +70,8 @@ update msg model =
 
     UpdateBullets -> (filterLiveBullets model, Cmd.none)
 
-    RotateLeft -> (do (SpaceShuttle.rotate Momentum.counterClockwise) model, Cmd.none)
-    RotateRight -> (do (SpaceShuttle.rotate Momentum.clockwise) model, Cmd.none)
+    RotateLeft -> (do (SpaceShuttle.rotate CounterClockwise) model, Cmd.none)
+    RotateRight -> (do (SpaceShuttle.rotate Clockwise) model, Cmd.none)
     Thrust -> (do SpaceShuttle.thrust model, Cmd.none)
 
     NOOP -> (model, Cmd.none)

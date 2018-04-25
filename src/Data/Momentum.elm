@@ -17,6 +17,8 @@ e = Heading  1  0
 s = Heading  0  1
 w = Heading -1  0
 
+type Rotation = Clockwise | CounterClockwise
+
 clockwiseHeading: Heading -> Heading
 clockwiseHeading {dx, dy} =
     case (dx, dy) of
@@ -38,6 +40,12 @@ counterClockwiseHeading {dx, dy} =
 updateHeading: (Heading -> Heading) -> Momentum -> Momentum
 updateHeading changeDirection momentum =
     {momentum|heading = changeDirection momentum.heading}
+
+rotate: Rotation -> Momentum -> Momentum
+rotate rotation =
+    case rotation of
+        Clockwise -> clockwise
+        CounterClockwise -> counterClockwise
 
 clockwise: Momentum -> Momentum
 clockwise = updateHeading clockwiseHeading

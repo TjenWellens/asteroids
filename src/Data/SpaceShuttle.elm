@@ -1,7 +1,7 @@
 module Data.SpaceShuttle exposing (..)
 
 import Data.Bullet exposing (Bullet)
-import Data.Momentum exposing (Momentum, Heading, Speed)
+import Data.Momentum as Momentum exposing (Heading, Momentum, Rotation, Speed)
 import Data.Position exposing (Acceleration, Position)
 import Data.Universe exposing (Universe, reappear)
 
@@ -61,6 +61,6 @@ accelerate spaceShuttle =
             , acceleration = newAcceleration
         }
 
-rotate: (Momentum -> Momentum) -> SpaceShuttle -> SpaceShuttle
-rotate changeDirection spaceShuttle =
-    {spaceShuttle|momentum = (changeDirection spaceShuttle.momentum)}
+rotate: Rotation -> SpaceShuttle -> SpaceShuttle
+rotate rotation spaceShuttle =
+    {spaceShuttle|momentum = Momentum.rotate rotation spaceShuttle.momentum}
