@@ -54,7 +54,6 @@ type Msg
   | RotateLeft
   | Thrust
   | RotateRight
-  | MoveDown
   | UpdateBullets
   | NOOP
 
@@ -73,7 +72,6 @@ update msg model =
     RotateLeft -> (do (rotate counterClockwise) model, Cmd.none)
     Thrust -> (do SpaceShuttle.thrust model, Cmd.none)
     RotateRight -> (do (rotate clockwise) model, Cmd.none)
-    MoveDown -> update NOOP model
 
     NOOP -> (model, Cmd.none)
 
@@ -140,9 +138,6 @@ keyDown keyCode =
 
     --  Arrow right
         39 -> RotateRight
-
-    --  Arrow down
-        40 -> MoveDown
 
         _ -> NOOP
 
