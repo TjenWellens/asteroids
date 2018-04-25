@@ -1,7 +1,7 @@
 module Data.SpaceShuttle exposing (..)
 
 import Data.Bullet exposing (Bullet)
-import Data.Momentum exposing (Heading, Speed)
+import Data.Momentum exposing (Momentum, Heading, Speed)
 import Data.Position exposing (Acceleration, Position)
 import Data.Universe exposing (Universe, reappear)
 
@@ -31,9 +31,10 @@ fire spaceShuttle =
         position = gun spaceShuttle
         heading = spaceShuttle.heading
         speed = spaceShuttle.speed + 4
+        momentum = Momentum heading speed
         range = 10
     in
-        Bullet position heading speed range
+        Bullet position momentum range
 
 move: SpaceShuttle -> SpaceShuttle
 move spaceShuttle =

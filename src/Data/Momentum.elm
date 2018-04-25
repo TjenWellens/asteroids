@@ -1,5 +1,10 @@
 module Data.Momentum exposing (..)
 
+type alias Momentum =
+    { heading: Heading
+    , speed: Speed
+    }
+
 type alias Heading =
     { dx: Int
     , dy: Int

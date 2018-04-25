@@ -9,8 +9,8 @@ bullet bullet =
     let
         x_1 = toString bullet.position.x
         y_1 = toString bullet.position.y
-        x_2 = toString (bullet.position.x - toFloat bullet.heading.dx)
-        y_2 = toString (bullet.position.y - toFloat bullet.heading.dy)
+        x_2 = toString (bullet.position.x - toFloat bullet.momentum.heading.dx)
+        y_2 = toString (bullet.position.y - toFloat bullet.momentum.heading.dy)
     in
         line [x1 x_1, y1 y_1, x2 x_2, y2 y_2, stroke "#aaaaaa"] []
 
