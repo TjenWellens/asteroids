@@ -60,3 +60,7 @@ accelerate spaceShuttle =
             | momentum = newMomentum
             , acceleration = newAcceleration
         }
+
+rotate: (Momentum -> Momentum) -> SpaceShuttle -> SpaceShuttle
+rotate changeDirection spaceShuttle =
+    {spaceShuttle|momentum = (changeDirection spaceShuttle.momentum)}
