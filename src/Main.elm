@@ -1,7 +1,8 @@
 module Main exposing (main)
 
 import Data.Bullet as Bullet exposing (Bullet)
-import Data.Position as Position exposing (Heading, Position, Speed)
+import Data.Heading as Heading exposing (Heading)
+import Data.Position as Position exposing (Position, Speed)
 import Data.SpaceShuttle as SpaceShuttle exposing (SpaceShuttle)
 import Data.Universe as Universe exposing (Universe)
 import Html exposing (Html)
@@ -37,7 +38,7 @@ type alias Model =
 init : (Model, Cmd Msg)
 init =
   (Model 0
-  (SpaceShuttle (Position 50 50) (Heading 0 1) 0 0)
+  (SpaceShuttle (Position 50 50) Heading.s 0 0)
   []
   (Universe 200 200)
   , Cmd.none)
@@ -109,19 +110,19 @@ rotate changeDirection spaceShuttle =
 clockwise: Heading -> Heading
 clockwise {dx, dy} =
     case (dx, dy) of
-        ( 0, -1) -> Heading  1  0
-        ( 1,  0) -> Heading  0  1
-        ( 0,  1) -> Heading -1  0
-        (-1,  0) -> Heading  0 -1
+        ( 0, -1) -> Heading.e
+        ( 1,  0) -> Heading.s
+        ( 0,  1) -> Heading.w
+        (-1,  0) -> Heading.n
         _ -> Heading  0 0
 
 counterClockwise: Heading -> Heading
 counterClockwise {dx, dy} =
     case (dx, dy) of
-        ( 0, -1) -> Heading -1  0
-        ( 1,  0) -> Heading  0 -1
-        ( 0,  1) -> Heading  1  0
-        (-1,  0) -> Heading  0  1
+        ( 0, -1) -> Heading.w
+        ( 1,  0) -> Heading.n
+        ( 0,  1) -> Heading.e
+        (-1,  0) -> Heading.s
         _ -> Heading  0 0
 
 keyDown: KeyCode -> Msg

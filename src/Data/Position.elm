@@ -1,13 +1,10 @@
 module Data.Position exposing (..)
 
+import Data.Heading exposing (Heading)
+
 type alias Position =
     { x: Float
     , y: Float
-    }
-
-type alias Heading =
-    { dx: Int
-    , dy: Int
     }
 
 type alias Speed = Int

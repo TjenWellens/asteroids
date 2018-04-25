@@ -1,6 +1,7 @@
 module Views.SpaceShuttle exposing (drawSpaceShuttle)
 
-import Data.Position exposing (Heading, Position)
+import Data.Heading exposing (Heading)
+import Data.Position exposing (Position)
 import Data.SpaceShuttle exposing (SpaceShuttle)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
