@@ -15,8 +15,8 @@ gun: SpaceShuttle -> Position
 gun spaceShuttle =
     let
         gunDistance = 7.0
-        x = spaceShuttle.position.x + spaceShuttle.momentum.heading.dx * gunDistance
-        y = spaceShuttle.position.y + spaceShuttle.momentum.heading.dy * gunDistance
+        x = spaceShuttle.position.x + spaceShuttle.acceleration.heading.dx * gunDistance
+        y = spaceShuttle.position.y + spaceShuttle.acceleration.heading.dy * gunDistance
     in
         Position x y
 
