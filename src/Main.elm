@@ -110,17 +110,17 @@ doCollision ({bullets, astroids} as model) =
     in
         {model|bullets=newBullets, astroids=newAstroids}
 
-explodeIfCollides: (Astroid -> Collision) -> (Bullet -> Collision -> Bool) -> (Bullet -> List Bullet) -> List Astroid -> Bullet -> List Bullet
-explodeIfCollides toCollision collide explode astroids bullet =
+explodeIfCollides: (a -> Collision) -> (b -> Collision -> Bool) -> (b -> List b) -> List a -> b -> List b
+explodeIfCollides toCollision collide explode aList b =
     let
-        shouldExplode = astroids
+        shouldExplode = aList
             |> List.map toCollision
-            |> List.any (collide bullet)
+            |> List.any (collide b)
     in
         if shouldExplode then
-            explode bullet
+            explode b
         else
-            [ bullet ]
+            [ b ]
 
 explodeIfCollides1: List Astroid -> Bullet -> List Bullet
 explodeIfCollides1 = explodeIfCollides Astroid.toCollision Bullet.collides Bullet.explode
