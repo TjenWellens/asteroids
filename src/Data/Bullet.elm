@@ -12,7 +12,7 @@ type alias Bullet =
 move: Bullet -> Bullet
 move bullet =
     let
-        position = Momentum.move bullet.momentum bullet.position
+        position = Momentum.move bullet.position bullet.momentum
         momentum = bullet.momentum
         range = bullet.range - 1
     in

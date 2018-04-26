@@ -40,7 +40,7 @@ fire spaceShuttle =
 move: SpaceShuttle -> SpaceShuttle
 move spaceShuttle =
     let
-        newPosition = Momentum.move spaceShuttle.momentum spaceShuttle.position
+        newPosition = Momentum.move spaceShuttle.position spaceShuttle.momentum
     in
         {spaceShuttle|position = newPosition}
 
