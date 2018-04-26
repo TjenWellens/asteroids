@@ -17,12 +17,11 @@ type alias SpaceShuttle =
 gun: SpaceShuttle -> Position
 gun spaceShuttle =
     let
-        gunDistance = 7.0
-        x = spaceShuttle.position.x + spaceShuttle.aim.dx * gunDistance
-        y = spaceShuttle.position.y + spaceShuttle.aim.dy * gunDistance
+        gunDistance = 7
+        towards = Momentum spaceShuttle.aim gunDistance
+        bar = Momentum.move spaceShuttle.position towards
     in
-        Position x y
-
+        bar
 fire: SpaceShuttle -> Bullet
 fire spaceShuttle =
     let
