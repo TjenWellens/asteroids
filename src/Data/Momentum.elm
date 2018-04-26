@@ -2,6 +2,7 @@ module Data.Momentum exposing (..)
 
 import Data.Heading as Heading exposing (Heading)
 import Data.Position as Position exposing (Position)
+import Data.Rotation exposing (Rotation(..))
 
 type alias Momentum =
     { heading: Heading
@@ -15,8 +16,6 @@ toN = Momentum Heading.n 1
 toE = Momentum Heading.e 1
 toS = Momentum Heading.s 1
 toW = Momentum Heading.w 1
-
-type Rotation = Clockwise | CounterClockwise
 
 updateHeading: (Heading -> Heading) -> Momentum -> Momentum
 updateHeading changeDirection momentum =
