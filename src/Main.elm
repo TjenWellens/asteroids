@@ -124,39 +124,9 @@ explodeIfCollides obstacleToCollision collide explode obstacles b =
 
 explodeIfCollides1: List Astroid -> Bullet -> List Bullet
 explodeIfCollides1 = explodeIfCollides Astroid.toCollision Bullet.collides Bullet.explode
---explodeIfCollides1 astroids bullet =
---    let
---        shouldExplode = astroids
---            |> List.map Astroid.toCollision
---            |> List.any (Bullet.collides bullet)
---    in
---        if shouldExplode then
---            Bullet.explode bullet
---        else
---            [ bullet ]
 
 explodeIfCollides2: List Bullet -> Astroid -> List Astroid
-explodeIfCollides2 bullets astroid =
-    let
-        shouldExplode = bullets
-            |> List.map Bullet.toCollision
-            |> List.any (Astroid.collides astroid)
-    in
-        if shouldExplode then
-            Astroid.explode astroid
-        else
-            [ astroid ]
---
---foo: List a -> b -> List b
---foo =
---    let
---        shouldExplode = List.map Astroid.toCollision
---            |> List.any Bullet.collides bullet
---    in
---        if shouldExplode then
---            Bullet.explode bullet
---        else
---            [ bullet ]
+explodeIfCollides2 = explodeIfCollides Bullet.toCollision Astroid.collides Astroid.explode
 
 do: (SpaceShuttle -> SpaceShuttle) -> Model -> Model
 do mapper model =
