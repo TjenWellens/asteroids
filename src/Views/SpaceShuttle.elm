@@ -2,13 +2,22 @@ module Views.SpaceShuttle exposing (drawSpaceShuttle)
 
 import Data.Heading exposing (Heading)
 import Data.Position exposing (Position)
-import Data.SpaceShuttle exposing (SpaceShuttle)
+import Data.SpaceShuttle as SpaceShuttle exposing (SpaceShuttle, Livelyness(..))
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 
 drawSpaceShuttle: SpaceShuttle -> List (Svg msg)
 drawSpaceShuttle spaceShuttle =
-    [ polygon [ points (toPoints spaceShuttle), stroke "#aaaaaa" ] [] ]
+    let
+        color = getColor spaceShuttle
+    in
+        [ polygon [ points (toPoints spaceShuttle), stroke color ] [] ]
+
+getColor: SpaceShuttle -> String
+getColor spaceShuttle =
+    case spaceShuttle.livelyness of
+        Alive -> "#aaaaaa"
+        Dead -> "#ff0000"
 
 toPoints: SpaceShuttle -> String
 toPoints spaceShuttle =

@@ -7,7 +7,7 @@ import Data.Heading as Heading exposing (Heading)
 import Data.Rotation exposing (Rotation(..))
 import Data.Momentum as Momentum exposing (Momentum)
 import Data.Position as Position exposing (Position)
-import Data.SpaceShuttle as SpaceShuttle exposing (SpaceShuttle)
+import Data.SpaceShuttle as SpaceShuttle exposing (Livelyness(..), SpaceShuttle)
 import Data.Universe as Universe exposing (Universe)
 import Html exposing (Html)
 import Svg exposing (..)
@@ -44,7 +44,7 @@ type alias Model =
 init : (Model, Cmd Msg)
 init =
   (Model 0
-  (SpaceShuttle (Position 50 50) Momentum.none Momentum.none Heading.n)
+  (SpaceShuttle (Position 50 50) Momentum.none Momentum.none Heading.n Alive)
   []
   (Universe 200 200)
   [ Astroid (Position 20 20) (Momentum.toE) Astroid.Big
@@ -101,14 +101,16 @@ tick newTime model =
         |> doCollision
 
 doCollision: Model -> Model
-doCollision ({bullets, astroids} as model) =
+doCollision ({bullets, astroids, spaceShuttle} as model) =
     let
         newBullets = bullets
             |> List.filterMap (explodeBulletIfCollidesAstroids astroids)
         newAstroids = astroids
             |> List.concatMap (explodeAstroidIfCollidesBullets bullets)
+        newSpaceShuttle = spaceShuttle
+            |> explodeSpaceShuttleIfCollidesAstroids astroids
     in
-        {model|bullets=newBullets, astroids=newAstroids}
+        {model|bullets=newBullets, astroids=newAstroids, spaceShuttle=newSpaceShuttle}
 
 explodeIfCollides: (obstacle -> Collision) -> (b -> Collision -> Bool) -> (Bool -> b -> result) -> List obstacle -> b -> result
 explodeIfCollides obstacleToCollision collide explode obstacles b =
@@ -121,6 +123,9 @@ explodeIfCollides obstacleToCollision collide explode obstacles b =
 
 explodeBulletIfCollidesAstroids: List Astroid -> Bullet -> Maybe Bullet
 explodeBulletIfCollidesAstroids = explodeIfCollides Astroid.toCollision Bullet.collides Bullet.explodeIf
+
+explodeSpaceShuttleIfCollidesAstroids: List Astroid -> SpaceShuttle -> SpaceShuttle
+explodeSpaceShuttleIfCollidesAstroids = explodeIfCollides Astroid.toCollision SpaceShuttle.collides SpaceShuttle.explodeIf
 
 explodeAstroidIfCollidesBullets: List Bullet -> Astroid -> List Astroid
 explodeAstroidIfCollidesBullets = explodeIfCollides Bullet.toCollision Astroid.collides Astroid.explodeIf

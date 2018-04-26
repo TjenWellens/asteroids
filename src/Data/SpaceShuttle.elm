@@ -1,6 +1,7 @@
 module Data.SpaceShuttle exposing (..)
 
 import Data.Bullet exposing (Bullet)
+import Data.Collision as Collision exposing (Collision)
 import Data.Heading as Heading exposing (Heading)
 import Data.Momentum as Momentum exposing (Momentum)
 import Data.Rotation exposing (Rotation(..))
@@ -12,7 +13,10 @@ type alias SpaceShuttle =
     , momentum: Momentum
     , acceleration: Momentum
     , aim: Heading
+    , livelyness: Livelyness
     }
+
+type Livelyness = Alive | Dead
 
 gun: SpaceShuttle -> Position
 gun spaceShuttle =
@@ -68,3 +72,23 @@ rotate rotation spaceShuttle =
         aim = Heading.rotate rotation spaceShuttle.aim
     in
         { spaceShuttle | aim = aim }
+
+getRadius: SpaceShuttle -> Float
+getRadius _ = 6
+
+toCollision: SpaceShuttle -> Collision
+toCollision ({position} as spaceShuttle) =
+    Collision position (getRadius spaceShuttle)
+
+collides: SpaceShuttle -> Collision -> Bool
+collides spaceShuttle = Collision.collide (toCollision spaceShuttle)
+
+explode: SpaceShuttle -> SpaceShuttle
+explode spaceShuttle = {spaceShuttle|livelyness=Dead}
+
+explodeIf: Bool -> SpaceShuttle -> SpaceShuttle
+explodeIf shouldExplode spaceShuttle =
+    if shouldExplode then
+        explode spaceShuttle
+    else
+        spaceShuttle
