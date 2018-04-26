@@ -103,14 +103,14 @@ doCollision: Model -> Model
 doCollision ({bullets, astroids} as model) =
     let
         newBullets = bullets
-            |> List.concatMap (explodeIfCollides astroids)
+            |> List.concatMap (explodeIfCollides1 astroids)
         newAstroids = astroids
             |> List.concatMap (explodeIfCollides2 bullets)
     in
         {model|bullets=newBullets, astroids=newAstroids}
 
-explodeIfCollides: List Astroid -> Bullet -> List Bullet
-explodeIfCollides astroids bullet =
+explodeIfCollides1: List Astroid -> Bullet -> List Bullet
+explodeIfCollides1 astroids bullet =
     let
         shouldExplode = astroids
             |> List.map Astroid.toCollision
