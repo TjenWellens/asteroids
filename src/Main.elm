@@ -92,9 +92,11 @@ tick newTime model =
         |> dobs Bullet.move
         |> filterLiveBullets
         |> do SpaceShuttle.move
+        |> doas Astroid.move
         |> do (Universe.reappear model.universe)
         |> do SpaceShuttle.accelerate
         |> dobs (Universe.reappear model.universe)
+        |> doas (Universe.reappear model.universe)
 
 do: (SpaceShuttle -> SpaceShuttle) -> Model -> Model
 do mapper model =
@@ -103,6 +105,10 @@ do mapper model =
 dobs: (Bullet -> Bullet) -> Model -> Model
 dobs mapper model =
     {model|bullets = List.map mapper model.bullets}
+
+doas: (Astroid -> Astroid) -> Model -> Model
+doas mapper model =
+    {model|astroids = List.map mapper model.astroids}
 
 moveSpaceShuttle: Model -> Model
 moveSpaceShuttle model =
