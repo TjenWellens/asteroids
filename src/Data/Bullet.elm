@@ -25,15 +25,15 @@ alive bullet = bullet.range > 0
 getRadius: Bullet -> Float
 getRadius _ = 0.7
 
-explode: Bullet -> List Bullet
-explode bullet = []
+explode: Bullet -> Maybe Bullet
+explode bullet = Nothing
 
-explodeIf: Bool -> Bullet -> List Bullet
+explodeIf: Bool -> Bullet -> Maybe Bullet
 explodeIf shouldExplode bullet =
     if shouldExplode then
         explode bullet
     else
-        [ bullet ]
+        Just bullet
 
 toCollision: Bullet -> Collision
 toCollision ({position} as bullet) =

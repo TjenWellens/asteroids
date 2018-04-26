@@ -104,7 +104,7 @@ doCollision: Model -> Model
 doCollision ({bullets, astroids} as model) =
     let
         newBullets = bullets
-            |> List.concatMap (explodeBulletIfCollidesAstroids astroids)
+            |> List.filterMap (explodeBulletIfCollidesAstroids astroids)
         newAstroids = astroids
             |> List.concatMap (explodeAstroidIfCollidesBullets bullets)
     in
@@ -119,7 +119,7 @@ explodeIfCollides obstacleToCollision collide explode obstacles b =
     in
         explode shouldExplode b
 
-explodeBulletIfCollidesAstroids: List Astroid -> Bullet -> List Bullet
+explodeBulletIfCollidesAstroids: List Astroid -> Bullet -> Maybe Bullet
 explodeBulletIfCollidesAstroids = explodeIfCollides Astroid.toCollision Bullet.collides Bullet.explodeIf
 
 explodeAstroidIfCollidesBullets: List Bullet -> Astroid -> List Astroid
