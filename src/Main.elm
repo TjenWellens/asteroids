@@ -4,6 +4,7 @@ import Data.Astroid as Astroid exposing (Astroid)
 import Data.Bullet as Bullet exposing (Bullet)
 import Data.Collision as Collision exposing (Collision)
 import Data.Heading as Heading exposing (Heading)
+import Data.Model as Model exposing (Model)
 import Data.Rotation exposing (Rotation(..))
 import Data.Momentum as Momentum exposing (Momentum)
 import Data.Position as Position exposing (Position)
@@ -23,7 +24,7 @@ import Views.Bullet exposing (bullet)
 
 main =
   Html.program
-    { init = init
+    { init = (Model.init, Cmd.none)
     , view = view
     , update = update
     , subscriptions = subscriptions
@@ -32,26 +33,8 @@ main =
 
 
 -- MODEL
-type alias Model =
-    { time: Time
-    , spaceShuttle: SpaceShuttle
-    , bullets: List Bullet
-    , universe: Universe
-    , astroids: List Astroid
-    }
-
-
 init : (Model, Cmd Msg)
-init =
-  (Model 0
-  (SpaceShuttle (Position 50 50) Momentum.none Momentum.none Heading.n Alive)
-  []
-  (Universe 200 200)
-  [ Astroid (Position 20 20) (Momentum.toE) Astroid.Big
-  , Astroid (Position 100 100) (Momentum.toS) Astroid.Medium
-  , Astroid (Position 40 100) (Momentum.toW) Astroid.Small
-  ]
-  , Cmd.none)
+init = (Model.init, Cmd.none)
 
 
 
@@ -65,7 +48,6 @@ type Msg
   | RotateLeft
   | RotateRight
   | Thrust
-  | UpdateBullets
   | NOOP
 
 
@@ -76,82 +58,33 @@ update msg model =
 
     KeyDown keycode -> update (keyDown keycode) model
 
-    FireBullet -> (fire model, Cmd.none)
+    FireBullet -> (Model.fire model, Cmd.none)
 
-    UpdateBullets -> (filterLiveBullets model, Cmd.none)
-
-    RotateLeft -> (do (SpaceShuttle.rotate CounterClockwise) model, Cmd.none)
-    RotateRight -> (do (SpaceShuttle.rotate Clockwise) model, Cmd.none)
-    Thrust -> (do SpaceShuttle.thrust model, Cmd.none)
+    RotateLeft -> (Model.spaceShuttle (SpaceShuttle.rotate CounterClockwise) model, Cmd.none)
+    RotateRight -> (Model.spaceShuttle (SpaceShuttle.rotate Clockwise) model, Cmd.none)
+    Thrust -> (Model.spaceShuttle SpaceShuttle.thrust model, Cmd.none)
 
     NOOP -> (model, Cmd.none)
 
 tick: Time -> Model -> Model
 tick newTime model =
-    if gameOver model then
+    if Model.gameOver model then
         model
-            |> dobs Bullet.move
-            |> filterLiveBullets
-            |> dobs (Universe.reappear model.universe)
+            |> Model.bullets Bullet.move
+            |> Model.filterLiveBullets
+            |> Model.bullets (Universe.reappear model.universe)
     else
         model
-            |> tickTime newTime
-            |> dobs Bullet.move
-            |> filterLiveBullets
-            |> do SpaceShuttle.move
-            |> doas Astroid.move
-            |> do (Universe.reappear model.universe)
-            |> do SpaceShuttle.accelerate
-            |> dobs (Universe.reappear model.universe)
-            |> doas (Universe.reappear model.universe)
-            |> doCollision
-
-gameOver model = model.spaceShuttle.livelyness == Dead || List.isEmpty model.astroids
-
-doCollision: Model -> Model
-doCollision ({bullets, astroids, spaceShuttle} as model) =
-    let
-        newBullets = bullets
-            |> List.filterMap (explodeBulletIfCollidesAstroids astroids)
-        newAstroids = astroids
-            |> List.concatMap (explodeAstroidIfCollidesBullets bullets)
-            |> List.concatMap (explodeAstroidIfCollidesSpaceShuttles [spaceShuttle])
-        newSpaceShuttle = spaceShuttle
-            |> explodeSpaceShuttleIfCollidesAstroids astroids
-    in
-        {model|bullets=newBullets, astroids=newAstroids, spaceShuttle=newSpaceShuttle}
-
-explodeBulletIfCollidesAstroids: List Astroid -> Bullet -> Maybe Bullet
-explodeBulletIfCollidesAstroids = Collision.explodeIfCollides Astroid.toCollision Bullet.collides Bullet.explodeIf
-
-explodeAstroidIfCollidesBullets: List Bullet -> Astroid -> List Astroid
-explodeAstroidIfCollidesBullets = Collision.explodeIfCollides Bullet.toCollision Astroid.collides Astroid.explodeIf
-
-explodeAstroidIfCollidesSpaceShuttles: List SpaceShuttle -> Astroid -> List Astroid
-explodeAstroidIfCollidesSpaceShuttles = Collision.explodeIfCollides SpaceShuttle.toCollision Astroid.collides Astroid.explodeIf
-
-explodeSpaceShuttleIfCollidesAstroids: List Astroid -> SpaceShuttle -> SpaceShuttle
-explodeSpaceShuttleIfCollidesAstroids = Collision.explodeIfCollides Astroid.toCollision SpaceShuttle.collides SpaceShuttle.explodeIf
-
-do: (SpaceShuttle -> SpaceShuttle) -> Model -> Model
-do mapper model =
-    {model|spaceShuttle = mapper model.spaceShuttle}
-
-dobs: (Bullet -> Bullet) -> Model -> Model
-dobs mapper model =
-    {model|bullets = List.map mapper model.bullets}
-
-doas: (Astroid -> Astroid) -> Model -> Model
-doas mapper model =
-    {model|astroids = List.map mapper model.astroids}
-
-moveSpaceShuttle: Model -> Model
-moveSpaceShuttle model =
-    {model | spaceShuttle = SpaceShuttle.move model.spaceShuttle}
-
-tickTime: Time -> Model -> Model
-tickTime newTime model =
-    { model | time = newTime }
+            |> Model.tickTime newTime
+            |> Model.bullets Bullet.move
+            |> Model.filterLiveBullets
+            |> Model.spaceShuttle SpaceShuttle.move
+            |> Model.astroids Astroid.move
+            |> Model.spaceShuttle (Universe.reappear model.universe)
+            |> Model.spaceShuttle SpaceShuttle.accelerate
+            |> Model.bullets (Universe.reappear model.universe)
+            |> Model.astroids (Universe.reappear model.universe)
+            |> Model.doCollision
 
 keyDown: KeyCode -> Msg
 keyDown keyCode =
@@ -169,21 +102,6 @@ keyDown keyCode =
         39 -> RotateRight
 
         _ -> NOOP
-
-fire: Model -> Model
-fire model =
-    let
-        bullet = SpaceShuttle.fire model.spaceShuttle
-    in
-        { model | bullets = bullet :: model.bullets }
-
-filterLiveBullets: Model -> Model
-filterLiveBullets model =
-    let
-        bullets = model.bullets
-            |> List.filter Bullet.alive
-    in
-        { model | bullets = bullets }
 
 
 -- SUBSCRIPTIONS
