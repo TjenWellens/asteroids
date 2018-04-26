@@ -28,17 +28,16 @@ getRadius _ = 0.7
 explode: Bullet -> List Bullet
 explode bullet = []
 
+explodeIf: Bool -> Bullet -> List Bullet
+explodeIf shouldExplode bullet =
+    if shouldExplode then
+        explode bullet
+    else
+        [ bullet ]
+
 toCollision: Bullet -> Collision
 toCollision ({position} as bullet) =
     Collision position (getRadius bullet)
-
-explodeIfCollides: Collision -> Bullet -> List Bullet
-explodeIfCollides collision bullet =
-    if Collision.collide collision (toCollision bullet) then
-        explode bullet
-    else
-        [ bullet
-        ]
 
 collides: Bullet -> Collision -> Bool
 collides bullet = Collision.collide (toCollision bullet)

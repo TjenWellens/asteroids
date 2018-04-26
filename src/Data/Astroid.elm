@@ -45,17 +45,16 @@ explode astroid =
             , Astroid astroid.position Momentum.toW size
             ]
 
+explodeIf: Bool -> Astroid -> List Astroid
+explodeIf shouldExplode astroid =
+    if shouldExplode then
+        explode astroid
+    else
+        [ astroid ]
+
 toCollision: Astroid -> Collision
 toCollision ({position} as astroid) =
     Collision position (getRadius astroid)
-
-explodeIfCollides: Collision -> Astroid -> List Astroid
-explodeIfCollides collision astroid =
-    if Collision.collide collision (toCollision astroid) then
-        explode astroid
-    else
-        [ astroid
-        ]
 
 collides: Astroid -> Collision -> Bool
 collides astroid = Collision.collide (toCollision astroid)
