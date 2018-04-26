@@ -104,9 +104,9 @@ doCollision: Model -> Model
 doCollision ({bullets, astroids} as model) =
     let
         newBullets = bullets
-            |> List.concatMap (explodeIfCollides1 astroids)
+            |> List.concatMap (explodeBulletIfCollidesAstroids astroids)
         newAstroids = astroids
-            |> List.concatMap (explodeIfCollides2 bullets)
+            |> List.concatMap (explodeAstroidIfCollidesBullets bullets)
     in
         {model|bullets=newBullets, astroids=newAstroids}
 
@@ -122,11 +122,11 @@ explodeIfCollides obstacleToCollision collide explode obstacles b =
         else
             [ b ]
 
-explodeIfCollides1: List Astroid -> Bullet -> List Bullet
-explodeIfCollides1 = explodeIfCollides Astroid.toCollision Bullet.collides Bullet.explode
+explodeBulletIfCollidesAstroids: List Astroid -> Bullet -> List Bullet
+explodeBulletIfCollidesAstroids = explodeIfCollides Astroid.toCollision Bullet.collides Bullet.explode
 
-explodeIfCollides2: List Bullet -> Astroid -> List Astroid
-explodeIfCollides2 = explodeIfCollides Bullet.toCollision Astroid.collides Astroid.explode
+explodeAstroidIfCollidesBullets: List Bullet -> Astroid -> List Astroid
+explodeAstroidIfCollidesBullets = explodeIfCollides Bullet.toCollision Astroid.collides Astroid.explode
 
 do: (SpaceShuttle -> SpaceShuttle) -> Model -> Model
 do mapper model =
