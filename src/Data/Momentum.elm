@@ -1,5 +1,6 @@
 module Data.Momentum exposing (..)
 
+import Data.Heading as Heading exposing (Heading)
 import Data.Position as Position exposing (Position)
 
 type alias Momentum =
@@ -7,43 +8,15 @@ type alias Momentum =
     , speed: Speed
     }
 
-type alias Heading =
-    { dx: Float
-    , dy: Float
-    }
-
 type alias Speed = Int
 
-n = Heading  0.0 -1.0
-e = Heading  1.0  0.0
-s = Heading  0.0  1.0
-w = Heading -1.0  0.0
-
-none = Momentum n 0
-toN = Momentum n 1
-toE = Momentum e 1
-toS = Momentum s 1
-toW = Momentum w 1
+none = Momentum Heading.n 0
+toN = Momentum Heading.n 1
+toE = Momentum Heading.e 1
+toS = Momentum Heading.s 1
+toW = Momentum Heading.w 1
 
 type Rotation = Clockwise | CounterClockwise
-
-clockwiseHeading: Heading -> Heading
-clockwiseHeading {dx, dy} =
-    case (dx, dy) of
-        ( 0.0, -1.0) -> e
-        ( 1.0,  0.0) -> s
-        ( 0.0,  1.0) -> w
-        (-1.0,  0.0) -> n
-        _ -> Heading  0.0 0.0
-
-counterClockwiseHeading: Heading -> Heading
-counterClockwiseHeading {dx, dy} =
-    case (dx, dy) of
-        ( 0.0, -1.0) -> w
-        ( 1.0,  0.0) -> n
-        ( 0.0,  1.0) -> e
-        (-1.0,  0.0) -> s
-        _ -> Heading  0.0 0.0
 
 updateHeading: (Heading -> Heading) -> Momentum -> Momentum
 updateHeading changeDirection momentum =
@@ -56,10 +29,10 @@ rotate rotation =
         CounterClockwise -> counterClockwise
 
 clockwise: Momentum -> Momentum
-clockwise = updateHeading clockwiseHeading
+clockwise = updateHeading Heading.clockwise
 
 counterClockwise: Momentum -> Momentum
-counterClockwise = updateHeading counterClockwiseHeading
+counterClockwise = updateHeading Heading.counterClockwise
 
 move: Momentum -> Position -> Position
 move {heading, speed} position =
@@ -68,18 +41,6 @@ move {heading, speed} position =
         y = position.y + (heading.dy * toFloat speed)
     in
         Position x y
-
-sum: Heading -> Heading -> Heading
-sum a b =
-    Heading (a.dx + b.dx) (a.dy + b.dy)
-
-times: Heading -> Float -> Heading
-times a n =
-    Heading (a.dx * n) (a.dy * n)
-
-divide: Heading -> Float -> Heading
-divide a n =
-    Heading (a.dx / n) (a.dy / n)
 
 combine: Momentum -> Momentum -> Momentum
 combine momentum acceleration =
@@ -94,10 +55,10 @@ weighedCombine momentum acceleration =
     let
         speed = momentum.speed + acceleration.speed
         heading =
-            ( divide
-                ( sum
-                    (times momentum.heading (toFloat momentum.speed))
-                    (times acceleration.heading (toFloat acceleration.speed))
+            ( Heading.divide
+                ( Heading.sum
+                    (Heading.times momentum.heading (toFloat momentum.speed))
+                    (Heading.times acceleration.heading (toFloat acceleration.speed))
                 )
                 (toFloat speed)
             )
