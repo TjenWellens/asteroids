@@ -1,5 +1,6 @@
 module Main exposing (main)
 
+import Data.Astroid as Astroid exposing (Astroid)
 import Data.Bullet as Bullet exposing (Bullet)
 import Data.Heading as Heading exposing (Heading)
 import Data.Rotation exposing (Rotation(..))
@@ -12,6 +13,7 @@ import Svg exposing (..)
 import Svg.Attributes exposing (..)
 import Time exposing (Time, second)
 import Keyboard exposing (KeyCode)
+import Views.Astroid exposing (drawAstroid)
 import Views.Clock exposing (clock)
 import Views.SpaceShuttle exposing (drawSpaceShuttle)
 import Views.Bullet exposing (bullets)
@@ -34,6 +36,7 @@ type alias Model =
     , spaceShuttle: SpaceShuttle
     , bullets: List Bullet
     , universe: Universe
+    , astroids: List Astroid
     }
 
 
@@ -43,6 +46,10 @@ init =
   (SpaceShuttle (Position 50 50) Momentum.none Momentum.none Heading.n)
   []
   (Universe 200 200)
+  [ Astroid (Position 20 20) (Momentum.toE) Astroid.Big
+  , Astroid (Position 100 100) (Momentum.toS) Astroid.Medium
+  , Astroid (Position 40 100) (Momentum.toW) Astroid.Small
+  ]
   , Cmd.none)
 
 
@@ -159,6 +166,7 @@ view model =
         (
         []
         ++ clock model.time
+        ++ List.map drawAstroid model.astroids
         ++ drawSpaceShuttle model.spaceShuttle
         ++ bullets model.bullets
         )
