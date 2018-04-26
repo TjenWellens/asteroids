@@ -107,6 +107,7 @@ doCollision ({bullets, astroids, spaceShuttle} as model) =
             |> List.filterMap (explodeBulletIfCollidesAstroids astroids)
         newAstroids = astroids
             |> List.concatMap (explodeAstroidIfCollidesBullets bullets)
+            |> List.concatMap (explodeAstroidIfCollidesSpaceShuttles [spaceShuttle])
         newSpaceShuttle = spaceShuttle
             |> explodeSpaceShuttleIfCollidesAstroids astroids
     in
@@ -126,6 +127,9 @@ explodeBulletIfCollidesAstroids = explodeIfCollides Astroid.toCollision Bullet.c
 
 explodeAstroidIfCollidesBullets: List Bullet -> Astroid -> List Astroid
 explodeAstroidIfCollidesBullets = explodeIfCollides Bullet.toCollision Astroid.collides Astroid.explodeIf
+
+explodeAstroidIfCollidesSpaceShuttles: List SpaceShuttle -> Astroid -> List Astroid
+explodeAstroidIfCollidesSpaceShuttles = explodeIfCollides SpaceShuttle.toCollision Astroid.collides Astroid.explodeIf
 
 explodeSpaceShuttleIfCollidesAstroids: List Astroid -> SpaceShuttle -> SpaceShuttle
 explodeSpaceShuttleIfCollidesAstroids = explodeIfCollides Astroid.toCollision SpaceShuttle.collides SpaceShuttle.explodeIf
