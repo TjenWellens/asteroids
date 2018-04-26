@@ -124,11 +124,11 @@ explodeIfCollides obstacleToCollision collide explode obstacles b =
 explodeBulletIfCollidesAstroids: List Astroid -> Bullet -> Maybe Bullet
 explodeBulletIfCollidesAstroids = explodeIfCollides Astroid.toCollision Bullet.collides Bullet.explodeIf
 
-explodeSpaceShuttleIfCollidesAstroids: List Astroid -> SpaceShuttle -> SpaceShuttle
-explodeSpaceShuttleIfCollidesAstroids = explodeIfCollides Astroid.toCollision SpaceShuttle.collides SpaceShuttle.explodeIf
-
 explodeAstroidIfCollidesBullets: List Bullet -> Astroid -> List Astroid
 explodeAstroidIfCollidesBullets = explodeIfCollides Bullet.toCollision Astroid.collides Astroid.explodeIf
+
+explodeSpaceShuttleIfCollidesAstroids: List Astroid -> SpaceShuttle -> SpaceShuttle
+explodeSpaceShuttleIfCollidesAstroids = explodeIfCollides Astroid.toCollision SpaceShuttle.collides SpaceShuttle.explodeIf
 
 do: (SpaceShuttle -> SpaceShuttle) -> Model -> Model
 do mapper model =
