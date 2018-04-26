@@ -97,6 +97,39 @@ tick newTime model =
         |> do SpaceShuttle.accelerate
         |> dobs (Universe.reappear model.universe)
         |> doas (Universe.reappear model.universe)
+        |> doCollision
+
+doCollision: Model -> Model
+doCollision ({bullets, astroids} as model) =
+    let
+        newBullets = bullets
+            |> List.concatMap (explodeIfCollides astroids)
+        newAstroids = astroids
+    in
+        {model|bullets=newBullets, astroids=newAstroids}
+
+explodeIfCollides: List Astroid -> Bullet -> List Bullet
+explodeIfCollides astroids bullet =
+    let
+        shouldExplode = astroids
+            |> List.map Astroid.toCollision
+            |> List.any (Bullet.collides bullet)
+    in
+        if shouldExplode then
+            Bullet.explode bullet
+        else
+            [ bullet ]
+--
+--foo: List a -> b -> List b
+--foo =
+--    let
+--        shouldExplode = List.map Astroid.toCollision
+--            |> List.any Bullet.collides bullet
+--    in
+--        if shouldExplode then
+--            Bullet.explode bullet
+--        else
+--            [ bullet ]
 
 do: (SpaceShuttle -> SpaceShuttle) -> Model -> Model
 do mapper model =
