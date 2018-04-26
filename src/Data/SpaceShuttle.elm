@@ -47,8 +47,7 @@ move spaceShuttle =
 thrust: SpaceShuttle -> SpaceShuttle
 thrust spaceShuttle =
     let
-        oldAcceleration = spaceShuttle.acceleration
-        newAcceleration = {oldAcceleration | speed = 1}
+        newAcceleration = Momentum spaceShuttle.aim 1
     in
         {spaceShuttle|acceleration = newAcceleration}
 
