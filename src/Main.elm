@@ -16,7 +16,7 @@ import Keyboard exposing (KeyCode)
 import Views.Astroid exposing (drawAstroid)
 import Views.Clock exposing (clock)
 import Views.SpaceShuttle exposing (drawSpaceShuttle)
-import Views.Bullet exposing (bullets)
+import Views.Bullet exposing (bullet)
 
 
 
@@ -168,5 +168,5 @@ view model =
         ++ clock model.time
         ++ List.map drawAstroid model.astroids
         ++ drawSpaceShuttle model.spaceShuttle
-        ++ bullets model.bullets
+        ++ List.map bullet model.bullets
         )

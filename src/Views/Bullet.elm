@@ -1,4 +1,4 @@
-module Views.Bullet exposing (bullets)
+module Views.Bullet exposing (bullet)
 
 import Data.Bullet exposing (Bullet)
 import Svg exposing (..)
@@ -12,7 +12,3 @@ bullet bullet =
         radius = "0.7"
     in
         circle [ cx x, cy y, r radius, fill "#aaaaaa" ] []
-
-bullets : List Bullet -> List (Svg msg)
-bullets bullets =
-    List.map bullet bullets
