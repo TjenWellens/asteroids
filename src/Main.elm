@@ -2,6 +2,7 @@ module Main exposing (main)
 
 import Data.Astroid as Astroid exposing (Astroid)
 import Data.Bullet as Bullet exposing (Bullet)
+import Data.Collision exposing (Collision)
 import Data.Heading as Heading exposing (Heading)
 import Data.Rotation exposing (Rotation(..))
 import Data.Momentum as Momentum exposing (Momentum)
@@ -109,17 +110,30 @@ doCollision ({bullets, astroids} as model) =
     in
         {model|bullets=newBullets, astroids=newAstroids}
 
-explodeIfCollides1: List Astroid -> Bullet -> List Bullet
-explodeIfCollides1 astroids bullet =
+explodeIfCollides: (Astroid -> Collision) -> (Bullet -> Collision -> Bool) -> (Bullet -> List Bullet) -> List Astroid -> Bullet -> List Bullet
+explodeIfCollides toCollision collide explode astroids bullet =
     let
         shouldExplode = astroids
-            |> List.map Astroid.toCollision
-            |> List.any (Bullet.collides bullet)
+            |> List.map toCollision
+            |> List.any (collide bullet)
     in
         if shouldExplode then
-            Bullet.explode bullet
+            explode bullet
         else
             [ bullet ]
+
+explodeIfCollides1: List Astroid -> Bullet -> List Bullet
+explodeIfCollides1 = explodeIfCollides Astroid.toCollision Bullet.collides Bullet.explode
+--explodeIfCollides1 astroids bullet =
+--    let
+--        shouldExplode = astroids
+--            |> List.map Astroid.toCollision
+--            |> List.any (Bullet.collides bullet)
+--    in
+--        if shouldExplode then
+--            Bullet.explode bullet
+--        else
+--            [ bullet ]
 
 explodeIfCollides2: List Bullet -> Astroid -> List Astroid
 explodeIfCollides2 bullets astroid =
