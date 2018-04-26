@@ -88,17 +88,25 @@ update msg model =
 
 tick: Time -> Model -> Model
 tick newTime model =
-    model
-        |> tickTime newTime
-        |> dobs Bullet.move
-        |> filterLiveBullets
-        |> do SpaceShuttle.move
-        |> doas Astroid.move
-        |> do (Universe.reappear model.universe)
-        |> do SpaceShuttle.accelerate
-        |> dobs (Universe.reappear model.universe)
-        |> doas (Universe.reappear model.universe)
-        |> doCollision
+    if gameOver model then
+        model
+            |> dobs Bullet.move
+            |> filterLiveBullets
+            |> dobs (Universe.reappear model.universe)
+    else
+        model
+            |> tickTime newTime
+            |> dobs Bullet.move
+            |> filterLiveBullets
+            |> do SpaceShuttle.move
+            |> doas Astroid.move
+            |> do (Universe.reappear model.universe)
+            |> do SpaceShuttle.accelerate
+            |> dobs (Universe.reappear model.universe)
+            |> doas (Universe.reappear model.universe)
+            |> doCollision
+
+gameOver model = model.spaceShuttle.livelyness == Dead || List.isEmpty model.astroids
 
 doCollision: Model -> Model
 doCollision ({bullets, astroids, spaceShuttle} as model) =
