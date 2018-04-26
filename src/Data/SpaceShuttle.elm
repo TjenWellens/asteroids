@@ -23,13 +23,16 @@ gun spaceShuttle =
 fire: SpaceShuttle -> Bullet
 fire spaceShuttle =
     let
-        position = gun spaceShuttle
-        heading = spaceShuttle.momentum.heading
-        speed = spaceShuttle.momentum.speed + 4
-        momentum = Momentum heading speed
+        speedIncrease = 4
         range = 10
+        startPosition = gun spaceShuttle
+
+        shipMomentum = spaceShuttle.momentum
+        shipAcceleration = spaceShuttle.acceleration
+        bulletAcceleration = {shipAcceleration|speed = shipAcceleration.speed + speedIncrease}
+        bulletMomentum = Momentum.combine shipMomentum bulletAcceleration
     in
-        Bullet position momentum range
+        Bullet startPosition bulletMomentum range
 
 move: SpaceShuttle -> SpaceShuttle
 move spaceShuttle =
