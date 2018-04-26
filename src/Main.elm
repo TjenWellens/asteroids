@@ -1,6 +1,7 @@
 module Main exposing (main)
 
 import Data.Bullet as Bullet exposing (Bullet)
+import Data.Heading as Heading exposing (Heading)
 import Data.Rotation exposing (Rotation(..))
 import Data.Momentum as Momentum exposing (Momentum)
 import Data.Position as Position exposing (Position)
@@ -39,7 +40,7 @@ type alias Model =
 init : (Model, Cmd Msg)
 init =
   (Model 0
-  (SpaceShuttle (Position 50 50) Momentum.none Momentum.none)
+  (SpaceShuttle (Position 50 50) Momentum.none Momentum.none Heading.n)
   []
   (Universe 200 200)
   , Cmd.none)

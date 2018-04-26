@@ -1,7 +1,7 @@
 module Data.SpaceShuttle exposing (..)
 
 import Data.Bullet exposing (Bullet)
-import Data.Heading exposing (Heading)
+import Data.Heading as Heading exposing (Heading)
 import Data.Momentum as Momentum exposing (Momentum)
 import Data.Rotation exposing (Rotation(..))
 import Data.Position exposing (Acceleration, Position)
@@ -11,14 +11,15 @@ type alias SpaceShuttle =
     { position: Position
     , momentum: Momentum
     , acceleration: Momentum
+    , aim: Heading
     }
 
 gun: SpaceShuttle -> Position
 gun spaceShuttle =
     let
         gunDistance = 7.0
-        x = spaceShuttle.position.x + spaceShuttle.acceleration.heading.dx * gunDistance
-        y = spaceShuttle.position.y + spaceShuttle.acceleration.heading.dy * gunDistance
+        x = spaceShuttle.position.x + spaceShuttle.aim.dx * gunDistance
+        y = spaceShuttle.position.y + spaceShuttle.aim.dy * gunDistance
     in
         Position x y
 
@@ -31,8 +32,8 @@ fire spaceShuttle =
 
         shipMomentum = spaceShuttle.momentum
         shipAcceleration = spaceShuttle.acceleration
-        bulletAcceleration = {shipAcceleration|speed = shipAcceleration.speed + speedIncrease}
-        bulletMomentum = Momentum.combine shipMomentum bulletAcceleration
+        shotMomentum = Momentum spaceShuttle.aim (shipAcceleration.speed + speedIncrease)
+        bulletMomentum = Momentum.combine shipMomentum shotMomentum
     in
         Bullet startPosition bulletMomentum range
 
@@ -66,6 +67,6 @@ accelerate spaceShuttle =
 rotate: Rotation -> SpaceShuttle -> SpaceShuttle
 rotate rotation spaceShuttle =
     let
-        newAcceleration = Momentum.rotate rotation spaceShuttle.acceleration
+        aim = Heading.rotate rotation spaceShuttle.aim
     in
-        { spaceShuttle | acceleration = newAcceleration }
+        { spaceShuttle | aim = aim }
