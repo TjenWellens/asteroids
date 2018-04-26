@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Data.Astroid as Astroid exposing (Astroid)
 import Data.Bullet as Bullet exposing (Bullet)
-import Data.Collision exposing (Collision)
+import Data.Collision as Collision exposing (Collision)
 import Data.Heading as Heading exposing (Heading)
 import Data.Rotation exposing (Rotation(..))
 import Data.Momentum as Momentum exposing (Momentum)
@@ -113,26 +113,17 @@ doCollision ({bullets, astroids, spaceShuttle} as model) =
     in
         {model|bullets=newBullets, astroids=newAstroids, spaceShuttle=newSpaceShuttle}
 
-explodeIfCollides: (obstacle -> Collision) -> (b -> Collision -> Bool) -> (Bool -> b -> result) -> List obstacle -> b -> result
-explodeIfCollides obstacleToCollision collide explode obstacles b =
-    let
-        shouldExplode = obstacles
-            |> List.map obstacleToCollision
-            |> List.any (collide b)
-    in
-        explode shouldExplode b
-
 explodeBulletIfCollidesAstroids: List Astroid -> Bullet -> Maybe Bullet
-explodeBulletIfCollidesAstroids = explodeIfCollides Astroid.toCollision Bullet.collides Bullet.explodeIf
+explodeBulletIfCollidesAstroids = Collision.explodeIfCollides Astroid.toCollision Bullet.collides Bullet.explodeIf
 
 explodeAstroidIfCollidesBullets: List Bullet -> Astroid -> List Astroid
-explodeAstroidIfCollidesBullets = explodeIfCollides Bullet.toCollision Astroid.collides Astroid.explodeIf
+explodeAstroidIfCollidesBullets = Collision.explodeIfCollides Bullet.toCollision Astroid.collides Astroid.explodeIf
 
 explodeAstroidIfCollidesSpaceShuttles: List SpaceShuttle -> Astroid -> List Astroid
-explodeAstroidIfCollidesSpaceShuttles = explodeIfCollides SpaceShuttle.toCollision Astroid.collides Astroid.explodeIf
+explodeAstroidIfCollidesSpaceShuttles = Collision.explodeIfCollides SpaceShuttle.toCollision Astroid.collides Astroid.explodeIf
 
 explodeSpaceShuttleIfCollidesAstroids: List Astroid -> SpaceShuttle -> SpaceShuttle
-explodeSpaceShuttleIfCollidesAstroids = explodeIfCollides Astroid.toCollision SpaceShuttle.collides SpaceShuttle.explodeIf
+explodeSpaceShuttleIfCollidesAstroids = Collision.explodeIfCollides Astroid.toCollision SpaceShuttle.collides SpaceShuttle.explodeIf
 
 do: (SpaceShuttle -> SpaceShuttle) -> Model -> Model
 do mapper model =

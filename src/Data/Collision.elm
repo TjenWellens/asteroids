@@ -18,3 +18,12 @@ collide c1 c2 =
         r2 = c2.radius
     in
         (sqrt ((x2 - x1)^2 + (y2 - y1)^2)) < (r1 + r2)
+
+explodeIfCollides: (obstacle -> Collision) -> (b -> Collision -> Bool) -> (Bool -> b -> result) -> List obstacle -> b -> result
+explodeIfCollides obstacleToCollision collide explode obstacles b =
+    let
+        shouldExplode = obstacles
+            |> List.map obstacleToCollision
+            |> List.any (collide b)
+    in
+        explode shouldExplode b
