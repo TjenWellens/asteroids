@@ -82,6 +82,9 @@ tick newTime model =
     else
         model
             |> Model.tickTime newTime
+            |> Model.rotateIfRotating
+            |> Model.thrustIfThrusting
+            |> Model.fireIfFiring
             |> Model.bullets Bullet.move
             |> Model.filterLiveBullets
             |> Model.spaceShuttle SpaceShuttle.move

@@ -46,6 +46,26 @@ rotating flag rotation actions =
 updateActions: Model -> (Actions -> Actions) -> Model
 updateActions model update = {model|actions=(update model.actions)}
 
+thrustIfThrusting: Model -> Model
+thrustIfThrusting model =
+    if model.actions.thrusting then
+        spaceShuttle SpaceShuttle.thrust model
+    else
+        model
+
+fireIfFiring: Model -> Model
+fireIfFiring model =
+    if model.actions.firing then
+        fire model
+    else
+        model
+
+rotateIfRotating: Model -> Model
+rotateIfRotating model =
+    case model.actions.rotating of
+        Nothing -> model
+        Just rotation -> spaceShuttle (SpaceShuttle.rotate rotation) model
+
 init =
     Model 0
       (SpaceShuttle (Position 50 50) Momentum.none Momentum.none Heading.n Alive)
