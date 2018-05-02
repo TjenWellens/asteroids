@@ -9,7 +9,7 @@ e = turns 0.75
 s = turns 0.50
 w = turns 0.25
 
-rotationStep = turns 0.25
+rotationStep = turns 0.1
 
 rotate: Rotation -> Heading -> Heading
 rotate rotation =
