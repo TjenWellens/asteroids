@@ -1,5 +1,6 @@
 module Main exposing (main)
 
+import AnimationFrame exposing (times, diffs)
 import Data.Astroid as Astroid exposing (Astroid)
 import Data.Bullet as Bullet exposing (Bullet)
 import Data.Collision as Collision exposing (Collision)
@@ -125,7 +126,7 @@ keyUp = translateKey False
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ Time.every second Tick
+        [ AnimationFrame.times Tick
         , Keyboard.downs KeyDown
         , Keyboard.ups KeyUp
         ]
