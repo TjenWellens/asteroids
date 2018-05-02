@@ -17,7 +17,34 @@ type alias Model =
     , bullets: List Bullet
     , universe: Universe
     , astroids: List Astroid
+    , actions: Actions
     }
+
+type alias Actions =
+    { thrusting: Bool
+    , firing: Bool
+    , rotating: Maybe Rotation
+    }
+
+thrusting: Bool -> Actions -> Actions
+thrusting flag actions= {actions|thrusting = flag}
+
+firing: Bool -> Actions -> Actions
+firing flag actions = {actions|firing = flag}
+
+rotating: Bool -> Rotation -> Actions -> Actions
+rotating flag rotation actions =
+    let
+        newRotating =
+            if flag then
+                Just rotation
+            else
+                Nothing
+    in
+        {actions|rotating = newRotating}
+
+updateActions: Model -> (Actions -> Actions) -> Model
+updateActions model update = {model|actions=(update model.actions)}
 
 init =
     Model 0
@@ -28,6 +55,8 @@ init =
       , Astroid (Position 100 100) (Momentum.toS) Astroid.Medium
       , Astroid (Position 40 100) (Momentum.toW) Astroid.Small
       ]
+      (Actions False False Nothing)
+
 gameOver model = model.spaceShuttle.livelyness == Dead || List.isEmpty model.astroids
 
 doCollision: Model -> Model

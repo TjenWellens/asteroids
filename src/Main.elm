@@ -44,10 +44,11 @@ init = (Model.init, Cmd.none)
 type Msg
   = Tick Time
   | KeyDown KeyCode
-  | FireBullet
-  | RotateLeft
-  | RotateRight
-  | Thrust
+  | KeyUp KeyCode
+  | FireBullet Bool
+  | RotateLeft Bool
+  | RotateRight Bool
+  | Thrust Bool
   | NOOP
 
 
@@ -58,11 +59,16 @@ update msg model =
 
     KeyDown keycode -> update (keyDown keycode) model
 
-    FireBullet -> (Model.fire model, Cmd.none)
+    KeyUp keycode -> update (keyUp keycode) model
 
-    RotateLeft -> (Model.spaceShuttle (SpaceShuttle.rotate CounterClockwise) model, Cmd.none)
-    RotateRight -> (Model.spaceShuttle (SpaceShuttle.rotate Clockwise) model, Cmd.none)
-    Thrust -> (Model.spaceShuttle SpaceShuttle.thrust model, Cmd.none)
+    FireBullet flag ->
+        (Model.updateActions model (Model.firing flag), Cmd.none)
+    RotateLeft flag ->
+        (Model.updateActions model (Model.rotating flag CounterClockwise), Cmd.none)
+    RotateRight flag ->
+        (Model.updateActions model (Model.rotating flag Clockwise), Cmd.none)
+    Thrust flag ->
+        (Model.updateActions model (Model.thrusting flag), Cmd.none)
 
     NOOP -> (model, Cmd.none)
 
@@ -86,22 +92,28 @@ tick newTime model =
             |> Model.astroids (Universe.reappear model.universe)
             |> Model.doCollision
 
-keyDown: KeyCode -> Msg
-keyDown keyCode =
+translateKey: Bool -> KeyCode -> Msg
+translateKey state keyCode =
     case keyCode of
     --  Space
-        32 -> FireBullet
+        32 -> FireBullet state
 
     --  Arrow left
-        37 -> RotateLeft
+        37 -> RotateLeft state
 
     --  Arrow up
-        38 -> Thrust
+        38 -> Thrust state
 
     --  Arrow right
-        39 -> RotateRight
+        39 -> RotateRight state
 
         _ -> NOOP
+
+keyDown: KeyCode -> Msg
+keyDown = translateKey True
+
+keyUp: KeyCode -> Msg
+keyUp = translateKey False
 
 
 -- SUBSCRIPTIONS
@@ -112,6 +124,7 @@ subscriptions model =
     Sub.batch
         [ Time.every second Tick
         , Keyboard.downs KeyDown
+        , Keyboard.ups KeyUp
         ]
 
 
