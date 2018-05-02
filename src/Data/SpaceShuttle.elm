@@ -29,7 +29,7 @@ gun spaceShuttle =
 fire: SpaceShuttle -> Bullet
 fire spaceShuttle =
     let
-        speedIncrease = 4
+        speedIncrease = 4.0
         range = 10
         startPosition = gun spaceShuttle
 
@@ -59,7 +59,7 @@ accelerate spaceShuttle =
     let
         oldAcceleration = spaceShuttle.acceleration
         newMomentum = Momentum.combine spaceShuttle.momentum spaceShuttle.acceleration
-        newAcceleration = {oldAcceleration|speed = 0}
+        newAcceleration = {oldAcceleration|speed = 0.0}
     in
         { spaceShuttle
             | momentum = newMomentum

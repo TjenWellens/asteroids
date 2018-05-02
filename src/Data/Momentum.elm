@@ -9,7 +9,7 @@ type alias Momentum =
     , speed: Speed
     }
 
-type alias Speed = Int
+type alias Speed = Float
 
 none = Momentum Heading.n 0
 toN = Momentum Heading.n 1
@@ -37,17 +37,17 @@ move: Position -> Momentum -> Position
 move position {heading, speed} =
     let
         (dx, dy) = Heading.toVector heading
-        x = position.x + (dx * toFloat speed)
-        y = position.y + (dy * toFloat speed)
+        x = position.x + (dx * speed)
+        y = position.y + (dy * speed)
     in
         Position x y
 
 combine: Momentum -> Momentum -> Momentum
 combine momentum acceleration =
     case (momentum.speed, acceleration.speed) of
-        (0,0) -> none
-        (1,0) -> momentum
-        (0,1) -> acceleration
+        (0.0, 0.0) -> none
+        (1.0, 0.0) -> momentum
+        (0.0, 1.0) -> acceleration
         _ -> weighedCombine momentum acceleration
 
 weighedCombine: Momentum -> Momentum -> Momentum
@@ -57,10 +57,10 @@ weighedCombine momentum acceleration =
         heading =
             ( Heading.divide
                 ( Heading.sum
-                    (Heading.times momentum.heading (toFloat momentum.speed))
-                    (Heading.times acceleration.heading (toFloat acceleration.speed))
+                    (Heading.times momentum.heading momentum.speed)
+                    (Heading.times acceleration.heading acceleration.speed)
                 )
-                (toFloat speed)
+                (speed)
             )
     in
         Momentum heading speed
