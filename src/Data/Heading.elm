@@ -2,15 +2,14 @@ module Data.Heading exposing (..)
 
 import Data.Rotation exposing (Rotation(..))
 
-type alias Heading =
-    { dx: Float
-    , dy: Float
-    }
+type alias Heading = Float
 
-n = Heading  0.0 -1.0
-e = Heading  1.0  0.0
-s = Heading  0.0  1.0
-w = Heading -1.0  0.0
+n = turns 0.00
+e = turns 0.75
+s = turns 0.50
+w = turns 0.25
+
+rotationStep = turns 0.25
 
 rotate: Rotation -> Heading -> Heading
 rotate rotation =
@@ -19,22 +18,10 @@ rotate rotation =
         CounterClockwise -> counterClockwise
 
 clockwise: Heading -> Heading
-clockwise {dx, dy} =
-    case (dx, dy) of
-        ( 0.0, -1.0) -> e
-        ( 1.0,  0.0) -> s
-        ( 0.0,  1.0) -> w
-        (-1.0,  0.0) -> n
-        _ -> Heading  0.0 0.0
+clockwise heading = heading + rotationStep
 
 counterClockwise: Heading -> Heading
-counterClockwise {dx, dy} =
-    case (dx, dy) of
-        ( 0.0, -1.0) -> w
-        ( 1.0,  0.0) -> n
-        ( 0.0,  1.0) -> e
-        (-1.0,  0.0) -> s
-        _ -> Heading  0.0 0.0
+counterClockwise heading = heading - rotationStep
 
 type alias Vector = (Float, Float)
 
@@ -51,14 +38,17 @@ divide (x1, y1) n =
     ( (x1 / n), (y1 / n) )
 
 toAngle: Heading -> Float
-toAngle heading =
-    atan2 (heading.dy) (heading.dx)
+toAngle heading = heading
 
 toVector: Heading -> Vector
-toVector heading = (heading.dx, heading.dy)
+toVector heading =
+    let
+        angle = toAngle heading
+    in
+        (cos angle, sin angle)
 
 fromVector: Vector -> Heading
-fromVector (dx, dy) = Heading dx dy
+fromVector (dx, dy)= radians (atan2 dy dx)
 
 -- (heading, weight)
 weighedCombine: (Heading, Float) -> (Heading, Float) -> (Heading, Float)
