@@ -126,7 +126,7 @@ keyUp = translateKey False
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ AnimationFrame.times Tick
+        [ AnimationFrame.diffs Tick
         , Keyboard.downs KeyDown
         , Keyboard.ups KeyUp
         ]
