@@ -36,8 +36,9 @@ counterClockwise = updateHeading Heading.counterClockwise
 move: Position -> Momentum -> Position
 move position {heading, speed} =
     let
-        x = position.x + (heading.dx * toFloat speed)
-        y = position.y + (heading.dy * toFloat speed)
+        (dx, dy) = Heading.toVector heading
+        x = position.x + (dx * toFloat speed)
+        y = position.y + (dy * toFloat speed)
     in
         Position x y
 

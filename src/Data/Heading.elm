@@ -47,3 +47,10 @@ times a n =
 divide: Heading -> Float -> Heading
 divide a n =
     Heading (a.dx / n) (a.dy / n)
+
+toAngle: Heading -> Float
+toAngle heading =
+    atan2 (heading.dy) (heading.dx)
+
+toVector: Heading -> (Float, Float)
+toVector heading = (heading.dx, heading.dy)

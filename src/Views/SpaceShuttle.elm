@@ -1,6 +1,6 @@
 module Views.SpaceShuttle exposing (drawSpaceShuttle)
 
-import Data.Heading exposing (Heading)
+import Data.Heading as Heading exposing (Heading)
 import Data.Position exposing (Position)
 import Data.SpaceShuttle as SpaceShuttle exposing (SpaceShuttle, Livelyness(..))
 import Svg exposing (..)
@@ -39,7 +39,7 @@ positionToPoint position =
 rotate: Position -> Heading -> Position -> Position
 rotate center heading position =
     let
-        angle = (getAngleFromHeading heading) + (turns 0.25)
+        angle = (Heading.toAngle heading) + (turns 0.25)
 
         x = position.x
         y = position.y
@@ -54,7 +54,3 @@ rotate center heading position =
         newy = rotate_y + center.y
     in
         Position newx newy
-
-getAngleFromHeading: Heading -> Float
-getAngleFromHeading heading =
-    atan2 (heading.dy) (heading.dx)
