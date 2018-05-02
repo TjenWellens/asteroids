@@ -36,21 +36,45 @@ counterClockwise {dx, dy} =
         (-1.0,  0.0) -> s
         _ -> Heading  0.0 0.0
 
-sum: Heading -> Heading -> Heading
-sum a b =
-    Heading (a.dx + b.dx) (a.dy + b.dy)
+type alias Vector = (Float, Float)
 
-times: Heading -> Float -> Heading
-times a n =
-    Heading (a.dx * n) (a.dy * n)
+sum: Vector -> Vector -> Vector
+sum (x1, y1) (x2, y2) =
+    ( (x1 + x2), (y1 + y2) )
 
-divide: Heading -> Float -> Heading
-divide a n =
-    Heading (a.dx / n) (a.dy / n)
+times: Vector -> Float -> Vector
+times (x1, y1) n =
+    ( (x1 * n), (y1 * n) )
+
+divide: Vector -> Float -> Vector
+divide (x1, y1) n =
+    ( (x1 / n), (y1 / n) )
 
 toAngle: Heading -> Float
 toAngle heading =
     atan2 (heading.dy) (heading.dx)
 
-toVector: Heading -> (Float, Float)
+toVector: Heading -> Vector
 toVector heading = (heading.dx, heading.dy)
+
+fromVector: Vector -> Heading
+fromVector (dx, dy) = Heading dx dy
+
+-- (heading, weight)
+weighedCombine: (Heading, Float) -> (Heading, Float) -> (Heading, Float)
+weighedCombine (heading1, weight1) (heading2, weight2) =
+    let
+        v1 = toVector heading1
+        v2 = toVector heading2
+        weight = weight1 + weight2
+
+        vector =
+            ( divide
+                ( sum
+                    (times v1 weight1)
+                    (times v2 weight2)
+                )
+                (weight)
+            )
+    in
+        (fromVector vector, weight)

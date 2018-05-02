@@ -53,14 +53,6 @@ combine momentum acceleration =
 weighedCombine: Momentum -> Momentum -> Momentum
 weighedCombine momentum acceleration =
     let
-        speed = momentum.speed + acceleration.speed
-        heading =
-            ( Heading.divide
-                ( Heading.sum
-                    (Heading.times momentum.heading momentum.speed)
-                    (Heading.times acceleration.heading acceleration.speed)
-                )
-                (speed)
-            )
+        (heading, speed) = Heading.weighedCombine (momentum.heading, momentum.speed) (acceleration.heading, acceleration.speed)
     in
         Momentum heading speed
