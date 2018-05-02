@@ -1,6 +1,7 @@
 module Data.Collision exposing (..)
 
 import Data.Position exposing (Position)
+import Data.Vector as Vector
 
 type alias Collision =
     { position: Position
@@ -17,7 +18,7 @@ collide c1 c2 =
         y2 = c2.position.y
         r2 = c2.radius
     in
-        (sqrt ((x2 - x1)^2 + (y2 - y1)^2)) < (r1 + r2)
+        (Vector.distance (x1, y1) (x2, y2)) < (r1 + r2)
 
 explodeIfCollides: (obstacle -> Collision) -> (b -> Collision -> Bool) -> (Bool -> b -> result) -> List obstacle -> b -> result
 explodeIfCollides obstacleToCollision collide explode obstacles b =
